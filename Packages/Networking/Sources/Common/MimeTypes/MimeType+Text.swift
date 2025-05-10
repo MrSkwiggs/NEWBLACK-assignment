@@ -2,8 +2,6 @@
 //  Text.swift
 //  Networking
 //
-//  Created by Dorian on 17/04/2025.
-//
 
 public extension MimeType {
     // This may look redundant / useless, but it allows us to neatly construct Text mimetypes from static values

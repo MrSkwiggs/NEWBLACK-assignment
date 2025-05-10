@@ -2,8 +2,6 @@
 //  Headers.swift
 //  Networking
 //
-//  Created by Dorian on 16/04/2025.
-//
 
 import Foundation
 
