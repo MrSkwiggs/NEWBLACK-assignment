@@ -1,5 +1,6 @@
 import Foundation
 
+/// A type representing the scheme of a URL.
 public protocol Endpoint: Sendable {
     // MARK: Route
     /// The scheme of the endpoint (e.g., "https").
