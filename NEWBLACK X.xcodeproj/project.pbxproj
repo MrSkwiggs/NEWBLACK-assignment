@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		E713F6B32DCF3BB40031F51D /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
+		E713F6BA2DD08D980031F51D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		E7636F172DCF3A0100BE56A1 /* NEWBLACK X.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NEWBLACK X.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,6 +59,7 @@
 		E798A0DB2DCF3AFE0019DAE6 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				E713F6BA2DD08D980031F51D /* Core */,
 				E713F6B32DCF3BB40031F51D /* Networking */,
 			);
 			path = Packages;
