@@ -17,13 +17,14 @@ public final class RequestPerformer: Sendable {
     private let hooks: Hooks
 
     public init(
+        session: URLSession = .shared,
         encoder: JSONEncoder = .init(),
         decoder: JSONDecoder = .init(),
         hooks: Hooks = .init()
     ) {
         self.encoder = encoder
         self.decoder = decoder
-        self.session = .init(configuration: .ephemeral)
+        self.session = session
         self.hooks = hooks
     }
 
