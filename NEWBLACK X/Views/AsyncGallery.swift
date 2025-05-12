@@ -12,7 +12,7 @@ struct AsyncGallery<Content: View>: View {
     let images: [URL]
     let content: Content
 
-    init(images: [URL], @ViewBuilder content: () -> Content) {
+    init(images: [URL], @ViewBuilder content: () -> Content = { EmptyView() }) {
         self.images = images
         self.content = content()
     }

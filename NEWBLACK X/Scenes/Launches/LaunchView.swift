@@ -17,12 +17,20 @@ struct LaunchView: View {
 
     var body: some View {
         StickyHeaderList {
-            AsyncImage(url: launch.imageURLs.first) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
+            AsyncGallery(images: launch.imageURLs) {
+                HStack {
+                    Text("Status:")
+                        .foregroundStyle(.white.opacity(0.5))
+                    Text(launch.wasSuccessful ? "Success" : "Failure")
+                        .foregroundStyle(launch.wasSuccessful ? .green : .red)
+                }
+                .font(.caption)
+                .bold()
+                .padding(.horizontal, 8)
+                .padding(.vertical, 2)
+                .background {
+                    Capsule().fill(.ultraThinMaterial)
+                }
             }
         } content: {
             Text(launch.summary)

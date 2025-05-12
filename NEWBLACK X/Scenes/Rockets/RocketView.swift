@@ -14,13 +14,7 @@ struct RocketView: View {
 
     var body: some View {
         StickyHeaderList {
-            AsyncImage(url: rocket.imageURLs.first) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }
+            AsyncGallery(images: rocket.imageURLs)
         } content: {
             Text(rocket.details)
 
