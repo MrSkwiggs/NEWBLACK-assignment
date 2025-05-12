@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct LaunchesView: View {
+
+    @State
+    var startDate: Date = Date()
+
+    @State
+    var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 7)
+
     var body: some View {
         List {
             Section("Upcoming") {
@@ -25,6 +32,9 @@ struct LaunchesView: View {
                     }
                 }
             }
+        }
+        .toolbar {
+            DateRangeToolbar(startDate: $startDate, endDate: $endDate)
         }
     }
 }
