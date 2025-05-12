@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E766EFA02DD1F0840056BCCA /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = E766EF9F2DD1F0840056BCCA /* Shared */; };
+		E766EFA22DD1F0840056BCCA /* SharedMocks in Frameworks */ = {isa = PBXBuildFile; productRef = E766EFA12DD1F0840056BCCA /* SharedMocks */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E713F6B32DCF3BB40031F51D /* Networking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Networking; sourceTree = "<group>"; };
 		E713F6BA2DD08D980031F51D /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
@@ -25,6 +30,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E766EFA02DD1F0840056BCCA /* Shared in Frameworks */,
+				E766EFA22DD1F0840056BCCA /* SharedMocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +92,8 @@
 			);
 			name = "NEWBLACK X";
 			packageProductDependencies = (
+				E766EF9F2DD1F0840056BCCA /* Shared */,
+				E766EFA12DD1F0840056BCCA /* SharedMocks */,
 			);
 			productName = "NEWBLACK X";
 			productReference = E7636F172DCF3A0100BE56A1 /* NEWBLACK X.app */;
@@ -356,6 +365,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E766EF9F2DD1F0840056BCCA /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		E766EFA12DD1F0840056BCCA /* SharedMocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedMocks;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E7636F0F2DCF3A0100BE56A1 /* Project object */;
 }
