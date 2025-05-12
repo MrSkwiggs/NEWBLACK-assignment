@@ -12,7 +12,7 @@ import Shared
 public extension Rocket {
     static let kraken: Rocket = .init(
         id: UUID().uuidString,
-        imageURLs: [],
+        imageURLs: [.init(string: "https://imgur.com/DaCfMsj.jpg")!],
         name: "Kraken",
         details: "Meet the Kraken: a gravity-devouring behemoth that rips through orbits with all the subtlety of a barnacle-crusted squid. Equipped with next-gen thrusters and enough cargo space to haul an entire Mun colony—if they survive the ride. Side effects may include spontaneous disassembly and an existential crisis when you realize you just outran your parachute.",
         active: true,
