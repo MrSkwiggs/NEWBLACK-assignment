@@ -13,15 +13,15 @@ public final class Rocket: Identifiable {
     @Attribute(.unique)
     public private(set) var id: String
 
-    public package(set) var imageURLs: [URL]
-    public package(set) var name: String
-    public package(set) var details: String
-    public package(set) var active: Bool
-    public package(set) var type: String
-    public package(set) var successRate: Double
+    public private(set) var imageURLs: [URL]
+    public private(set) var name: String
+    public private(set) var details: String
+    public private(set) var active: Bool
+    public private(set) var type: String
+    public private(set) var successRate: Double
 
     @Relationship(deleteRule: .cascade)
-    var launches: [Launch]
+    public var launches: [Launch]
 
     package init(
         id: String,

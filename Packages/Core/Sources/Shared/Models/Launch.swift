@@ -15,16 +15,16 @@ public final class Launch: Identifiable {
     public private(set) var id: String
 
     /// The Mission name
-    public package(set) var mission: String
+    public private(set) var mission: String
     /// The launch site name
-    public package(set) var launchSite: String
+    public private(set) var launchSite: String
     /// The launch date
-    public package(set) var date: Date
+    public private(set) var date: Date
     /// Whether or not the launch was successful
-    public package(set) var wasSuccessful: Bool
+    public private(set) var wasSuccessful: Bool
 
     @Relationship
-    public private(set) var rocket: Rocket?
+    public var rocket: Rocket?
 
     package init(
         id: String,
