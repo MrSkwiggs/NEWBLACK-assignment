@@ -37,9 +37,7 @@ struct DateRangeToolbar: ToolbarContent {
     private var datePicker: some View {
         VStack {
             Text("Filter Launch Dates")
-
-            Spacer()
-
+                .padding(.bottom, 8)
             DatePicker("Start Date", selection: $startDate, displayedComponents: [.date])
 
             DatePicker("End Date", selection: $endDate, displayedComponents: [.date])
