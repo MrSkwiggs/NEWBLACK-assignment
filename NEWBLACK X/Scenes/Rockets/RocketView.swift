@@ -14,10 +14,41 @@ struct RocketView: View {
 
     var body: some View {
         List {
-            LabeledContent {
-                Text(rocket.name)
-            } label: {
-                Text("Name")
+
+            Text(rocket.details)
+
+            Section("Details") {
+                LabeledContent {
+                    Text(rocket.name)
+                } label: {
+                    Text("Name")
+                }
+                LabeledContent {
+                    Text(rocket.type)
+                } label: {
+                    Text("Type")
+                }
+                LabeledContent {
+                    Text(rocket.isActive ? "Active" : "Inactive")
+                        .foregroundStyle(rocket.isActive ? .green : .red)
+                } label: {
+                    Text("Status")
+                }
+            }
+
+            Section("Engines") {
+                if let engines = rocket.engines {
+                    HStack {
+                        Text("\(engines.count)")
+                            .monospacedDigit()
+                        Text(Image(systemName: "multiply"))
+                            .foregroundStyle(.secondary)
+                        Text(engines.type)
+                    }
+                } else {
+                    Text("No engines available")
+                        .foregroundStyle(.secondary)
+                }
             }
         }
         .navigationTitle(rocket.name)
