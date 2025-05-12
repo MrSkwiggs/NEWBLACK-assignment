@@ -9,7 +9,13 @@ import SwiftUI
 
 struct RocketsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(0..<10) { index in
+                NavigationLink("Rocket \(index)") {
+                    RocketView(rocket: "Rocket \(index)")
+                }
+            }
+        }
     }
 }
 
