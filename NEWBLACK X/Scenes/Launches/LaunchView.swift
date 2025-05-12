@@ -16,7 +16,15 @@ struct LaunchView: View {
     private var sheetContent: SheetPresentationContent?
 
     var body: some View {
-        List {
+        StickyHeaderList {
+            AsyncImage(url: launch.imageURLs.first) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                ProgressView()
+            }
+        } content: {
             Text(launch.summary)
 
             Section("Details") {

@@ -13,8 +13,15 @@ struct RocketView: View {
     let rocket: Rocket
 
     var body: some View {
-        List {
-
+        StickyHeaderList {
+            AsyncImage(url: rocket.imageURLs.first) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+            } placeholder: {
+                ProgressView()
+            }
+        } content: {
             Text(rocket.details)
 
             Section("Details") {
