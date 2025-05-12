@@ -6,19 +6,27 @@
 //
 
 import SwiftUI
+import SwiftData
+import Shared
 
 struct RocketsView: View {
+
+    @Query
+    var rockets: [Rocket]
+
     var body: some View {
         List {
-            ForEach(0..<10) { index in
-                NavigationLink("Rocket \(index)") {
-                    RocketView(rocket: "Rocket \(index)")
+            ForEach(rockets) { rocket in
+                NavigationLink(rocket.name) {
+                    RocketView(rocket: "Rocket \(rocket)")
                 }
             }
         }
     }
 }
 
+import Mocks
 #Preview {
     RocketsView()
+        .modelContainer(.previews)
 }
