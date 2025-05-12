@@ -29,7 +29,7 @@ public extension ModelContainer {
             context.insert(Rocket.kraken)
             context.insert(Rocket.dunaExpress)
             context.insert(Rocket.jebsJoyride)
-            context.insert(Rocket.mechejeb)
+            context.insert(Rocket.mechjeb)
             context.insert(Rocket.munWalker)
 
             return container

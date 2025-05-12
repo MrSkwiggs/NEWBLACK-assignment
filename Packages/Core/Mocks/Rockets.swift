@@ -30,7 +30,7 @@ public extension Rocket {
         successRate: 0.73
     )
 
-    static let mechejeb: Rocket = .init(
+    static let mechjeb: Rocket = .init(
         id: UUID().uuidString,
         imageURLs: [],
         name: "MechJeb",
