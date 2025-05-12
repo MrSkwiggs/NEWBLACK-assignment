@@ -12,12 +12,12 @@ struct HomeView: View {
         TabView {
             Tab("Launches", systemImage: "airplane.departure") {
                 NavigationStack {
-                    Text("Launches")
+                    LaunchesView()
                 }
             }
             Tab("Rockets", systemImage: "airplane") {
                 NavigationStack {
-                    Text("Rockets")
+                    RocketsView()
                 }
             }
         }
