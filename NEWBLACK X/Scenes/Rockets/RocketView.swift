@@ -6,17 +6,25 @@
 //
 
 import SwiftUI
+import Shared
 
 struct RocketView: View {
 
-    let rocket: String
+    let rocket: Rocket
 
     var body: some View {
-        Text("Rocket: \(rocket)")
-            .navigationTitle(rocket)
+        List {
+            LabeledContent {
+                Text(rocket.name)
+            } label: {
+                Text("Name")
+            }
+        }
+        .navigationTitle(rocket.name)
     }
 }
 
+import Mocks
 #Preview {
-    RocketView(rocket: "Falcon 9")
+    RocketView(rocket: .kraken)
 }

@@ -26,10 +26,15 @@ struct LaunchView: View {
             }
 
             Section("Rocket") {
-                Button {
-                    sheetContent = .rocket("Falcon 9")
-                } label: {
-                    Text("Falcon 9")
+                if let rocket = launch.rocket {
+
+                    Button {
+                        sheetContent = .rocket(rocket)
+                    } label: {
+                        RocketsView.Row(rocket: rocket)
+                    }
+                } else {
+                    Text("No rocket available")
                 }
             }
         }
@@ -47,12 +52,12 @@ struct LaunchView: View {
 
 extension LaunchView {
     enum SheetPresentationContent: Identifiable {
-        case rocket(String)
+        case rocket(Rocket)
 
         var id: String {
             switch self {
-            case .rocket(let name):
-                return name
+            case .rocket(let rocket):
+                return rocket.id
             }
         }
 
@@ -60,5 +65,11 @@ extension LaunchView {
 }
 
 #Preview {
-    LaunchView(launch: .kittenSP)
+    var launch: Launch = {
+        var launch: Launch = .kittenSP
+        launch.rocket = .kraken
+        return launch
+    }()
+
+    LaunchView(launch: launch)
 }

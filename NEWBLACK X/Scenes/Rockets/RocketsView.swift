@@ -18,7 +18,7 @@ struct RocketsView: View {
         List {
             ForEach(rockets) { rocket in
                 NavigationLink(rocket.name) {
-                    RocketView(rocket: "Rocket \(rocket)")
+                    RocketView(rocket: rocket)
                 }
             }
         }
