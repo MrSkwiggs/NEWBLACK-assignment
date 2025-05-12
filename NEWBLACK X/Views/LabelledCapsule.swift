@@ -19,6 +19,7 @@ struct LabelledCapsule<Image: View, Label: View>: View {
             label()
                 .font(.caption)
                 .foregroundStyle(.tint)
+                .lineLimit(1)
         }
         .padding(4)
         .padding(.trailing, 4)
