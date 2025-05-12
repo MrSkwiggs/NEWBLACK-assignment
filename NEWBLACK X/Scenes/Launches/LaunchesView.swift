@@ -9,7 +9,23 @@ import SwiftUI
 
 struct LaunchesView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section("Upcoming") {
+                ForEach(0..<5) { launch in
+                    NavigationLink("Upcoming Launch \(launch)") {
+                        LaunchView(launch: "Upcoming Launch \(launch)")
+                    }
+                }
+            }
+
+            Section("Past") {
+                ForEach(0..<10) { launch in
+                    NavigationLink("Past Launch \(launch)") {
+                        LaunchView(launch: "Past Launch \(launch)")
+                    }
+                }
+            }
+        }
     }
 }
 
