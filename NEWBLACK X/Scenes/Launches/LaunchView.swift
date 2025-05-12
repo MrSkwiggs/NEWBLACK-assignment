@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Shared
 
 struct LaunchView: View {
 
-    let launch: String
+    let launch: Launch
 
     @State
     private var sheetContent: SheetPresentationContent?
@@ -17,7 +18,11 @@ struct LaunchView: View {
     var body: some View {
         List {
             Section("Details") {
-                Text("Launch \(launch)")
+                LabeledContent {
+                    Text(launch.mission)
+                } label: {
+                    Text("Mission")
+                }
             }
 
             Section("Rocket") {
@@ -36,7 +41,7 @@ struct LaunchView: View {
                     .presentationDragIndicator(.visible)
             }
         }
-        .navigationTitle(launch)
+        .navigationTitle(launch.mission)
     }
 }
 
@@ -55,5 +60,5 @@ extension LaunchView {
 }
 
 #Preview {
-    LaunchView(launch: "Demo Launch")
+    LaunchView(launch: .kittenSP)
 }
