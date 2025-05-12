@@ -15,16 +15,22 @@ public final class Launch: Identifiable {
     public private(set) var id: String
 
     /// The Mission name
-    public package(set) var mission: String
+    public private(set) var mission: String
     /// The launch site name
-    public package(set) var launchSite: String
+    public private(set) var site: String
     /// The launch date
-    public package(set) var date: Date
+    public private(set) var date: Date
     /// Whether or not the launch was successful
-    public package(set) var wasSuccessful: Bool
+    public private(set) var wasSuccessful: Bool
+    /// A summary of the launch
+    public private(set) var summary: String
+    /// A link to the launch video
+    public private(set) var videoURL: URL?
+    /// Images of the launch
+    public private(set) var imageURLs: [URL]
 
     @Relationship
-    public private(set) var rocket: Rocket?
+    public var rocket: Rocket?
 
     package init(
         id: String,
@@ -32,13 +38,19 @@ public final class Launch: Identifiable {
         launchSite: String,
         date: Date,
         wasSuccessful: Bool,
+        summary: String,
+        videoURL: URL? = nil,
+        imageURLs: [URL] = [],
         rocket: Rocket? = nil
     ) {
         self.id = id
         self.mission = mission
-        self.launchSite = launchSite
+        self.site = launchSite
         self.date = date
         self.wasSuccessful = wasSuccessful
+        self.summary = summary
+        self.videoURL = videoURL
+        self.imageURLs = imageURLs
         self.rocket = rocket
     }
 }

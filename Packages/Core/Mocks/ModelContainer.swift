@@ -23,6 +23,14 @@ public extension ModelContainer {
             context.insert(Launch.kerbalSP)
             context.insert(Launch.kerbalSP2)
             context.insert(Launch.kittenSP)
+            context.insert(Launch.novaXPress)
+            context.insert(Launch.redDawn)
+
+            context.insert(Rocket.kraken)
+            context.insert(Rocket.dunaExpress)
+            context.insert(Rocket.jebsJoyride)
+            context.insert(Rocket.mechjeb)
+            context.insert(Rocket.munWalker)
 
             return container
         } catch {

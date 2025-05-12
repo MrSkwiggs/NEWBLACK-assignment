@@ -6,25 +6,72 @@
 //
 
 import SwiftUI
+import Shared
 
 struct LaunchView: View {
 
-    let launch: String
+    let launch: Launch
 
     @State
     private var sheetContent: SheetPresentationContent?
 
     var body: some View {
-        List {
+        StickyHeaderList {
+            AsyncGallery(images: launch.imageURLs) {
+                HStack {
+                    Text("Status:")
+                        .foregroundStyle(.white.opacity(0.5))
+                    Text(launch.wasSuccessful ? "Success" : "Failure")
+                        .foregroundStyle(launch.wasSuccessful ? .green : .red)
+                }
+                .font(.caption)
+                .bold()
+                .padding(.horizontal, 8)
+                .padding(.vertical, 2)
+                .background {
+                    Capsule().fill(.ultraThinMaterial)
+                }
+            }
+        } content: {
+            Text(launch.summary)
+
             Section("Details") {
-                Text("Launch \(launch)")
+                LabeledContent {
+                    Text(launch.mission)
+                } label: {
+                    Text("Mission")
+                }
+                LabeledContent {
+                    Text(launch.date.formatted(date: .long, time: .shortened))
+                } label: {
+                    Text("Date")
+                }
+                LabeledContent {
+                    if let url = launch.videoURL {
+                        Link(destination: url) {
+                            HStack {
+                                Text("Watch on Youtube")
+                                Image(systemName: "play.rectangle")
+                            }
+                        }
+                    } else {
+                        Text("No video available")
+                    }
+                } label: {
+                    Text("Video")
+                }
             }
 
             Section("Rocket") {
-                Button {
-                    sheetContent = .rocket("Falcon 9")
-                } label: {
-                    Text("Falcon 9")
+                if let rocket = launch.rocket {
+
+                    Button {
+                        sheetContent = .rocket(rocket)
+                    } label: {
+                        RocketsView.Row(rocket: rocket)
+                    }
+                } else {
+                    Text("No rocket available")
                 }
             }
         }
@@ -36,18 +83,18 @@ struct LaunchView: View {
                     .presentationDragIndicator(.visible)
             }
         }
-        .navigationTitle(launch)
+        .navigationTitle(launch.mission)
     }
 }
 
 extension LaunchView {
     enum SheetPresentationContent: Identifiable {
-        case rocket(String)
+        case rocket(Rocket)
 
         var id: String {
             switch self {
-            case .rocket(let name):
-                return name
+            case .rocket(let rocket):
+                return rocket.id
             }
         }
 
@@ -55,5 +102,6 @@ extension LaunchView {
 }
 
 #Preview {
-    LaunchView(launch: "Demo Launch")
+
+    LaunchView(launch: .kerbalSP)
 }
