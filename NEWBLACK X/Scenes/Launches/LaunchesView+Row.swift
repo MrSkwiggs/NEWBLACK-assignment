@@ -27,7 +27,7 @@ extension LaunchesView {
                     LabelledCapsule {
                         Image(systemName: "mappin.and.ellipse.circle.fill")
                     } label: {
-                        Text(launch.launchSite)
+                        Text(launch.site)
                     }
                     LabelledCapsule {
                         if launch.wasSuccessful {

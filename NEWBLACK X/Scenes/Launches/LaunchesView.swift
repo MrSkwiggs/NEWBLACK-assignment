@@ -21,10 +21,10 @@ struct LaunchesView: View {
         let now = Date.now
         _upcomingLaunches = Query(filter: #Predicate<Launch> {
             $0.date > now
-        })
+        }, sort: \.date, order: .reverse)
         _pastLaunches = Query(filter: #Predicate<Launch> {
             $0.date < now
-        })
+        }, sort: \.date, order: .reverse)
     }
 
     @State

@@ -17,11 +17,32 @@ struct LaunchView: View {
 
     var body: some View {
         List {
+            Text(launch.summary)
+
             Section("Details") {
                 LabeledContent {
                     Text(launch.mission)
                 } label: {
                     Text("Mission")
+                }
+                LabeledContent {
+                    Text(launch.date.formatted(date: .long, time: .shortened))
+                } label: {
+                    Text("Date")
+                }
+                LabeledContent {
+                    if let url = launch.videoURL {
+                        Link(destination: url) {
+                            HStack {
+                                Text("Watch on Youtube")
+                                Image(systemName: "play.rectangle")
+                            }
+                        }
+                    } else {
+                        Text("No video available")
+                    }
+                } label: {
+                    Text("Video")
                 }
             }
 
@@ -65,11 +86,6 @@ extension LaunchView {
 }
 
 #Preview {
-    var launch: Launch = {
-        var launch: Launch = .kittenSP
-        launch.rocket = .kraken
-        return launch
-    }()
 
-    LaunchView(launch: launch)
+    LaunchView(launch: .kerbalSP)
 }
