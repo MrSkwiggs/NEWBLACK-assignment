@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-public final class Launch {
+public final class Launch: Identifiable {
     /// The Launch ID
     @Attribute(.unique)
     public private(set) var id: String
@@ -23,17 +23,22 @@ public final class Launch {
     /// Whether or not the launch was successful
     public package(set) var wasSuccessful: Bool
 
+    @Relationship
+    public private(set) var rocket: Rocket?
+
     package init(
         id: String,
         mission: String,
         launchSite: String,
         date: Date,
-        wasSuccessful: Bool
+        wasSuccessful: Bool,
+        rocket: Rocket? = nil
     ) {
         self.id = id
         self.mission = mission
         self.launchSite = launchSite
         self.date = date
         self.wasSuccessful = wasSuccessful
+        self.rocket = rocket
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-public final class Rocket {
+public final class Rocket: Identifiable {
     @Attribute(.unique)
     public private(set) var id: String
 
@@ -20,6 +20,9 @@ public final class Rocket {
     public package(set) var type: String
     public package(set) var successRate: Double
 
+    @Relationship(deleteRule: .cascade)
+    var launches: [Launch]
+
     package init(
         id: String,
         imageURLs: [URL],
@@ -27,7 +30,8 @@ public final class Rocket {
         details: String,
         active: Bool,
         type: String,
-        successRate: Double
+        successRate: Double,
+        launches: [Launch] = []
     ) {
         self.id = id
         self.imageURLs = imageURLs
@@ -36,5 +40,6 @@ public final class Rocket {
         self.active = active
         self.type = type
         self.successRate = successRate
+        self.launches = launches
     }
 }
