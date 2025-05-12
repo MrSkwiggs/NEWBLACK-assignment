@@ -10,6 +10,10 @@ import SwiftData
 
 @Model
 public final class Launch {
+    /// The Launch ID
+    @Attribute(.unique)
+    public private(set) var id: String
+
     /// The Mission name
     public package(set) var mission: String
     /// The launch site name
@@ -19,7 +23,14 @@ public final class Launch {
     /// Whether or not the launch was successful
     public package(set) var wasSuccessful: Bool
 
-    package init(mission: String, launchSite: String, date: Date, wasSuccessful: Bool) {
+    package init(
+        id: String,
+        mission: String,
+        launchSite: String,
+        date: Date,
+        wasSuccessful: Bool
+    ) {
+        self.id = id
         self.mission = mission
         self.launchSite = launchSite
         self.date = date
