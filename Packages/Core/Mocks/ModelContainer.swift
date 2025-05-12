@@ -24,6 +24,12 @@ public extension ModelContainer {
             context.insert(Launch.kerbalSP2)
             context.insert(Launch.kittenSP)
 
+            context.insert(Rocket.kraken)
+            context.insert(Rocket.dunaExpress)
+            context.insert(Rocket.jebsJoyride)
+            context.insert(Rocket.mechejeb)
+            context.insert(Rocket.munWalker)
+
             return container
         } catch {
             fatalError("Failed to create preview container: \(error)")
