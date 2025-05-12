@@ -9,6 +9,7 @@ import Foundation
 import Networking
 
 public class BaseEndpoint: Endpoint, CustomStringConvertible, @unchecked Sendable {
+    public var method: Networking.Method { .get }
     public var scheme: Scheme { .https }
     public var host: String { "api.spacexdata.com" }
     public var path: String { "/v4" }
