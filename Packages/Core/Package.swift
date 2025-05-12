@@ -12,6 +12,10 @@ let package = Package(
             name: "Shared",
             targets: ["API"]
         ),
+        .library(
+            name: "SharedMocks",
+            targets: ["Mocks"]
+        )
     ],
     dependencies: [
         .package(path: "../Networking")
@@ -30,6 +34,11 @@ let package = Package(
                 "Networking"
             ],
             path: "Sources/API"
+        ),
+        .target(
+            name: "Mocks",
+            dependencies: ["Shared"],
+            path: "Mocks"
         ),
 
         .testTarget(
