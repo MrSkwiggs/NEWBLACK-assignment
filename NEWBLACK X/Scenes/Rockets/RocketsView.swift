@@ -17,8 +17,10 @@ struct RocketsView: View {
     var body: some View {
         List {
             ForEach(rockets) { rocket in
-                NavigationLink(rocket.name) {
+                NavigationLink {
                     RocketView(rocket: rocket)
+                } label: {
+                    Row(rocket: rocket)
                 }
             }
         }
