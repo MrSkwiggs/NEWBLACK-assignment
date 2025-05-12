@@ -6,8 +6,26 @@
 //
 
 import SwiftUI
+import Shared
+import SwiftData
 
 struct LaunchesView: View {
+
+    @Query
+    var upcomingLaunches: [Launch]
+
+    @Query
+    var pastLaunches: [Launch]
+
+    init() {
+        let now = Date.now
+        _upcomingLaunches = Query(filter: #Predicate<Launch> {
+            $0.date > now
+        })
+        _pastLaunches = Query(filter: #Predicate<Launch> {
+            $0.date < now
+        })
+    }
 
     @State
     var startDate: Date = Date()
@@ -18,17 +36,21 @@ struct LaunchesView: View {
     var body: some View {
         List {
             Section("Upcoming") {
-                ForEach(0..<5) { launch in
-                    NavigationLink("Upcoming Launch \(launch)") {
-                        LaunchView(launch: "Upcoming Launch \(launch)")
+                ForEach(upcomingLaunches) { launch in
+                    NavigationLink {
+                        LaunchView(launch: launch)
+                    } label: {
+                        Row(launch: launch)
                     }
                 }
             }
 
             Section("Past") {
-                ForEach(0..<10) { launch in
-                    NavigationLink("Past Launch \(launch)") {
-                        LaunchView(launch: "Past Launch \(launch)")
+                ForEach(pastLaunches) { launch in
+                    NavigationLink {
+                        LaunchView(launch: launch)
+                    } label: {
+                        Row(launch: launch)
                     }
                 }
             }
@@ -39,6 +61,9 @@ struct LaunchesView: View {
     }
 }
 
+import Mocks
+
 #Preview {
     LaunchesView()
+        .modelContainer(.previews)
 }
