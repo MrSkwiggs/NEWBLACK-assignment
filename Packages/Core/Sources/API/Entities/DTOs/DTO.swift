@@ -16,4 +16,5 @@ public protocol DTO: APIModel, Identifiable where Field.RawValue == String, Fiel
     associatedtype Field: RawRepresentable, Sendable, Hashable, CaseIterable, Equatable
 
     typealias Filter = Query<Self>.Filter
+    typealias Option = Query<Self>.Option
 }

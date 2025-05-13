@@ -21,7 +21,7 @@ public extension Launches {
 
         init(
             filter: Item.Filter = .empty,
-            options: [Query<Item>.Option],
+            options: [Item.Option],
         ) {
             body = .init(filter: filter, options: options)
             super.init()
