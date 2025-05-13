@@ -17,3 +17,9 @@ public extension Launches {
         }
     }
 }
+
+public extension API.Launches {
+    static func getLatest() async throws -> Launches.Latest.Response {
+        try await API.shared.send(Launches.Latest())
+    }
+}
