@@ -6,8 +6,9 @@
 //
 
 /// A coding key that can use dynamic, runtime-defined identifiers
-public struct DynamicCodingKey: CodingKey, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral {
+public struct DynamicCodingKey: CodingKey, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, ExpressibleByStringInterpolation {
     public typealias StringLiteralType = String
+    public typealias StringInterpolation = DefaultStringInterpolation
     public typealias IntegerLiteralType = Int
 
     public let stringValue: StringLiteralType
@@ -30,6 +31,10 @@ public struct DynamicCodingKey: CodingKey, ExpressibleByStringLiteral, Expressib
     public init(stringLiteral value: StringLiteralType) {
         self.stringValue = value
         self.intValue = .init(value)
+    }
+
+    public init(stringInterpolation: String) {
+        self.stringValue = stringInterpolation
     }
 
     public init(integerLiteral value: IntegerLiteralType) {
