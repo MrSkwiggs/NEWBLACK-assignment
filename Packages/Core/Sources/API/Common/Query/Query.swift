@@ -7,13 +7,51 @@
 
 import Foundation
 
-public protocol QueryFilterable: Sendable, Equatable, Comparable, Codable {
-    var query: String { get }
-}
+public protocol QueryFilterable: Sendable, Equatable, Codable {}
 
+extension String: QueryFilterable {}
+extension Int: QueryFilterable {}
+extension Double: QueryFilterable {}
+extension Bool: QueryFilterable {}
+
+/// <#Description#>
 public struct Query<Item: DTO>: Sendable, Encodable {
-    let query: Filter
+    let filter: Filter
     let options: [Option]
+
+
+    /// Creates a query with the given filter and options.
+    /// - Parameters:
+    ///   - filter: A filter to apply to the query.
+    ///   - options: An array of options to apply to the query.
+    public init(filter: Filter, options: [Option]) {
+        self.filter = filter
+        self.options = options
+    }
+
+    /// Creates a query with the given filters and options.
+    /// - Parameters:
+    ///   - filters: An array of filters to apply to the query. The filters are combined using a logical AND operation.
+    ///   - options: An array of options to apply to the query.
+    public init(filters: Filter..., options: [Option]) {
+        self.filter = .and(filters)
+        self.options = options
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case filter = "query"
+        case options
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.filter, forKey: .filter)
+
+        var optionsContainer = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .options)
+        for option in options {
+            try option.encode(to: &optionsContainer)
+        }
+    }
 }
 
 public struct AnyEncodable: Encodable {
@@ -45,6 +83,9 @@ public extension Query {
 
         case and([Filter])
         case or([Filter])
+
+        /// The absence of a filter.
+        public static var empty: Filter { .and([]) }
 
         public enum Range<Value: Comparable & Sendable>: Sendable, Equatable {
             case open(Swift.Range<Value>)
@@ -91,7 +132,7 @@ public extension Query {
             switch self {
             case .contains(_, let values):
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: codingKey)
-                try nested.encode(values.map { AnyEncodable($0) }, forKey: codingKey)
+                try nested.encode(values.map { AnyEncodable($0) }, forKey: operatorKey)
 
             case .equals(_, let value):
                 try container.encode(AnyEncodable(value), forKey: codingKey)
@@ -103,14 +144,14 @@ public extension Query {
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: codingKey)
                 try nested.encode(AnyEncodable(value), forKey: operatorKey)
             case .and(let filters):
-                var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: operatorKey)
+                var nested = container.nestedUnkeyedContainer(forKey: operatorKey)
                 for filter in filters {
-                    try filter.encode(to: nested.superEncoder(forKey: filter.codingKey))
+                    try nested.encode(filter)
                 }
             case .or(let filters):
-                var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: operatorKey)
+                var nested = container.nestedUnkeyedContainer(forKey: operatorKey)
                 for filter in filters {
-                    try filter.encode(to: nested.superEncoder(forKey: filter.codingKey))
+                    try nested.encode(filter)
                 }
             }
         }
@@ -118,13 +159,12 @@ public extension Query {
 }
 
 public extension Query {
-    enum Option: Sendable, Encodable {
+    enum Option: Sendable {
         case select(fields: Item.Field.AllCases = Item.Field.allCases)
         case pagination(Pagination)
         case populate(fields: Item.Field.AllCases)
 
-        public func encode(to encoder: any Encoder) throws {
-            var container = encoder.container(keyedBy: DynamicCodingKey.self)
+        func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
             switch self {
             case .select(let fields):
                 var nested = container.nestedUnkeyedContainer(forKey: "select")
@@ -133,7 +173,7 @@ public extension Query {
                 }
 
             case .pagination(let pagination):
-                try pagination.encode(to: encoder)
+                try pagination.encode(to: &container)
 
             case .populate(let fields):
                 var nested = container.nestedUnkeyedContainer(forKey: "populate")
@@ -146,8 +186,13 @@ public extension Query {
 }
 
 public extension Query.Option {
-    struct Pagination: Sendable, Equatable, Hashable, Encodable {
+    struct Pagination: Sendable, Equatable, Hashable {
         let page: Int
         let pageSize: Int
+
+        func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
+            try container.encode(page, forKey: "page")
+            try container.encode(pageSize, forKey: "limit")
+        }
     }
 }
