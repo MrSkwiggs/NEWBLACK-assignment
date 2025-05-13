@@ -45,7 +45,7 @@ public struct LaunchDTO: DTO {
 
     public enum Field: String, CodingKey, Sendable, Hashable, CaseIterable, Equatable {
         case id
-        case date
+        case date = "date_unix"
         case isUpcoming = "upcoming"
         case name
         case launchpadID = "launchpad"
