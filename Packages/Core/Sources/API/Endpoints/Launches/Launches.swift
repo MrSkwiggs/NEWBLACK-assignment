@@ -10,3 +10,7 @@ public class Launches: BaseEndpoint, @unchecked Sendable {
         super.path + "/launches"
     }
 }
+
+public extension API {
+    enum Launches {}
+}
