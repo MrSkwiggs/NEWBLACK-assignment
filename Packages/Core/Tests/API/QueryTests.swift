@@ -15,11 +15,7 @@ struct QueryTests {
     typealias Filter = Query<LaunchDTO>.Filter
     typealias Option = Query<LaunchDTO>.Option
 
-    let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-//        encoder.outputFormatting = .prettyPrinted
-        return encoder
-    }()
+    let encoder: JSONEncoder = .init()
 
     @Test(
         "Simple Filters",
