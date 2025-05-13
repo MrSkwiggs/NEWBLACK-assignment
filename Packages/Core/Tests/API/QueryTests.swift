@@ -18,6 +18,7 @@ struct QueryTests {
     let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .sortedKeys
+        encoder.dateEncodingStrategy = .secondsSince1970
         return encoder
     }()
 
@@ -84,6 +85,37 @@ struct QueryTests {
         )
     )
     func testComplexFilterEncoding(filter: Filter, expectedResult: String) async throws {
+        let data = try encoder.encode(filter)
+
+        guard let string = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
+
+        #expect(string == expectedResult)
+    }
+
+
+    private static let startDate = Date(timeIntervalSince1970: 12345)
+    private static let endDate = Date(timeIntervalSince1970: 67890)
+    @Test(
+        "Compound Filters",
+        arguments: zip(
+            [
+                Filter.range(field: .id, range: 0..<10),
+                Filter.range(field: .id, range: 0...10),
+                Filter.range(field: .date, range: startDate..<endDate),
+                Filter.range(field: .date, range: startDate...endDate),
+            ],
+            [
+                #"{"id":{"$gte":0,"$lt":10}}"#,
+                #"{"id":{"$gte":0,"$lte":10}}"#,
+                #"{"date_unix":{"$gte":12345,"$lt":67890}}"#,
+                #"{"date_unix":{"$gte":12345,"$lte":67890}}"#
+            ]
+        )
+    )
+    func testCompoundFilterEncoding(filter: Filter, expectedResult: String) async throws {
         let data = try encoder.encode(filter)
 
         guard let string = String(data: data, encoding: .utf8) else {
