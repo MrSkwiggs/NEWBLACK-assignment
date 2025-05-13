@@ -42,8 +42,14 @@ let package = Package(
         ),
 
         .testTarget(
-            name: "CoreTests",
-            dependencies: ["Shared"]
+            name: "SharedTests",
+            dependencies: ["Shared"],
+            path: "Tests/Shared"
+        ),
+        .testTarget(
+            name: "APITests",
+            dependencies: ["API"],
+            path: "Tests/API"
         ),
     ]
 )
