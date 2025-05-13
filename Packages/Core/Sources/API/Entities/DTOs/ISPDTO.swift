@@ -13,4 +13,9 @@ public struct ISPDTO: APIModel {
     let seaLevel: Int
     /// The ISP of the engine in vacuum, in seconds
     let vacuum: Int
+
+    enum CodingKeys: String, CodingKey {
+        case seaLevel = "sea_level"
+        case vacuum
+    }
 }

@@ -26,12 +26,21 @@ public struct EnginesDTO: APIModel {
 
     enum CodingKeys: String, CodingKey {
         case isp
-        case thrustSeaLevel = "thrust_sea_level"
-        case thrustVacuum = "thrust_vacuum"
         case number
         case type
         case propellant1 = "propellant_1"
         case propellant2 = "propellant_2"
         case thrustToWeight = "thrust_to_weight"
+    }
+
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        isp = try container.decode(.isp)
+        thrust = try .init(from: decoder) // defer decoding to ThrustDTO
+        number = try container.decode(.number)
+        type = try container.decode(.type)
+        propellant1 = try container.decode(.propellant1)
+        propellant2 = try container.decode(.propellant2)
+        thrustToWeightRatio = try container.decode(.thrustToWeight)
     }
 }
