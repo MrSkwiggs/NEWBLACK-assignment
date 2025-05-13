@@ -58,7 +58,12 @@ public struct AnyEncodable: Encodable {
     private let _encode: (Encoder) throws -> Void
 
     public init<T: Encodable>(_ value: T) {
-        self._encode = value.encode(to:)
+        self._encode = { encoder in
+            // Dispatching to single value container is needed to retain the
+            // original type & properly defer encoding through the encoder.
+            var container = encoder.singleValueContainer()
+            try container.encode(value)
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
