@@ -15,7 +15,11 @@ struct QueryTests {
     typealias Filter = Query<LaunchDTO>.Filter
     typealias Option = Query<LaunchDTO>.Option
 
-    let encoder: JSONEncoder = .init()
+    let encoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        return encoder
+    }()
 
     @Test(
         "Simple Filters",
@@ -81,6 +85,68 @@ struct QueryTests {
     )
     func testComplexFilterEncoding(filter: Filter, expectedResult: String) async throws {
         let data = try encoder.encode(filter)
+
+        guard let string = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
+
+        #expect(string == expectedResult)
+    }
+
+    @Test(
+        "Options",
+        arguments: zip(
+            [
+                Option.select(fields: [.id, .name]),
+                Option.populate(fields: [.launchpadID, .rocketID]),
+                Option.pagination(.init(page: 3, pageSize: 20))
+            ],
+            [
+                #"{"select":["id","name"]}"#,
+                #"{"populate":["launchpad","rocket"]}"#,
+                #"{"limit":20,"page":3}"#
+            ]
+        )
+    )
+    func testOptionEncoding(option: Option, expectedResult: String) async throws {
+        let data = try encoder.encode(TestStruct(option: option))
+
+        guard let string = String(data: data, encoding: .utf8) else {
+            Issue.record("Failed to convert data to string")
+            return
+        }
+
+        #expect(string == expectedResult)
+    }
+
+    private struct TestStruct: Encodable {
+        let option: Option
+
+        func encode(to encoder: any Encoder) throws {
+            var container = encoder.container(keyedBy: DynamicCodingKey.self)
+            try option.encode(to: &container)
+        }
+    }
+
+    @Test(
+        "Complete Query",
+        arguments: zip(
+            [
+                Query<LaunchDTO>(
+                    filter: .equals(field: .details, value: "some details"),
+                    options: [
+                        .populate(fields: [.details])
+                    ]
+                )
+            ],
+            [
+                #"{"options":{"populate":["details"]},"query":{"details":"some details"}}"#
+            ]
+        )
+    )
+    func testCompleteQueryEncoding(query: Query<LaunchDTO>, expectedResult: String) async throws {
+        let data = try encoder.encode(query)
 
         guard let string = String(data: data, encoding: .utf8) else {
             Issue.record("Failed to convert data to string")
