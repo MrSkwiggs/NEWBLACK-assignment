@@ -12,6 +12,8 @@ public final class API: Sendable {
 
     private let requestPerformer: RequestPerformer
 
+    package static let shared: API = .init()
+
     public init() {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
