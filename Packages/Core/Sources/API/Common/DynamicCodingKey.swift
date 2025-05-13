@@ -35,6 +35,7 @@ public struct DynamicCodingKey: CodingKey, ExpressibleByStringLiteral, Expressib
 
     public init(stringInterpolation: String) {
         self.stringValue = stringInterpolation
+        self.intValue = .init(stringInterpolation)
     }
 
     public init(integerLiteral value: IntegerLiteralType) {
