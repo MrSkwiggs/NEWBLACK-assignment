@@ -54,13 +54,13 @@ public extension Query {
         var codingKey: DynamicCodingKey {
             return switch self {
             case .equals(let field, _):
-                .init(field)
+                    .init(field)
             case .contains(let field, _):
-                .init(field)
+                    .init(field)
             case .lessThan(let field, _, _):
-                .init(field)
+                    .init(field)
             case .greaterThan(let field, _, _):
-                .init(field)
+                    .init(field)
 
             case .and:
                 "$and"
@@ -86,37 +86,20 @@ public extension Query {
             }
         }
 
-//        public var serialised: [String: AnyCodable] {
-//            switch self {
-//            case .equals(let field, let value):
-//                return [field.rawValue: AnyCodable(value)]
-//            case .contains(let field, let values):
-//                return [field.rawValue: AnyCodable(values)]
-//            case .lessThan(let field, let value):
-//                return [field.rawValue: AnyCodable(value)]
-//            case .greaterThan(let field, let value):
-//                return [field.rawValue: AnyCodable(value)]
-//            case .and(let filters):
-//                return ["$and": AnyCodable(filters.map { $0.serialised })]
-//            case .or(let filters):
-//                return ["$or": AnyCodable(filters.map { $0.serialised })]
-//            }
-//        }
-
         public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: DynamicCodingKey.self)
             switch self {
-            case .contains(let field, let values):
+            case .contains(_, let values):
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: codingKey)
                 try nested.encode(values.map { AnyEncodable($0) }, forKey: codingKey)
 
-            case .equals(let field, let value):
+            case .equals(_, let value):
                 try container.encode(AnyEncodable(value), forKey: codingKey)
 
-            case .greaterThan(let field, let value, _):
+            case .greaterThan(_, let value, _):
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: codingKey)
                 try nested.encode(AnyEncodable(value), forKey: operatorKey)
-            case .lessThan(let field, let value, _):
+            case .lessThan(_, let value, _):
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: codingKey)
                 try nested.encode(AnyEncodable(value), forKey: operatorKey)
             case .and(let filters):
@@ -135,10 +118,30 @@ public extension Query {
 }
 
 public extension Query {
-    enum Option: Sendable {
+    enum Option: Sendable, Encodable {
         case select(fields: Item.Field.AllCases = Item.Field.allCases)
         case pagination(Pagination)
         case populate(fields: Item.Field.AllCases)
+
+        public func encode(to encoder: any Encoder) throws {
+            var container = encoder.container(keyedBy: DynamicCodingKey.self)
+            switch self {
+            case .select(let fields):
+                var nested = container.nestedUnkeyedContainer(forKey: "select")
+                for field in fields {
+                    try nested.encode(field.rawValue)
+                }
+
+            case .pagination(let pagination):
+                try pagination.encode(to: encoder)
+
+            case .populate(let fields):
+                var nested = container.nestedUnkeyedContainer(forKey: "populate")
+                for field in fields {
+                    try nested.encode(field.rawValue)
+                }
+            }
+        }
     }
 }
 
