@@ -17,7 +17,7 @@ public final class API: Sendable {
     public init() {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
-        self.requestPerformer = RequestPerformer(decoder: decoder)
+        self.requestPerformer = RequestPerformer(session: .init(configuration: .ephemeral), decoder: decoder)
     }
 
     public func send<R: Request>(_ request: R) async throws -> R.Response {
