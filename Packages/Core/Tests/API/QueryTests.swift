@@ -12,8 +12,8 @@ import Testing
 @Suite("Query Tests")
 struct QueryTests {
 
-    typealias Filter = Query<LaunchDTO>.Filter
-    typealias Option = Query<LaunchDTO>.Option
+    typealias Filter = Query<Launch>.Filter
+    typealias Option = Query<Launch>.Option
 
     let encoder: JSONEncoder = {
         let encoder = JSONEncoder()
@@ -132,12 +132,14 @@ struct QueryTests {
             [
                 Option.select(fields: [.id, .name]),
                 Option.populate(fields: [.launchpad, .rocketID]),
-                Option.pagination(.init(page: 3, pageSize: 20))
+                Option.pagination(.init(page: 3, pageSize: 20)),
+                Option.sort([.by(.id, .forward), .by(.name, .reverse)]),
             ],
             [
                 #"{"select":["id","name"]}"#,
                 #"{"populate":["launchpad","rocket"]}"#,
-                #"{"limit":20,"page":3}"#
+                #"{"limit":20,"page":3}"#,
+                #"{"sort":[{"id":"asc"},{"name":"desc"}]}"#
             ]
         )
     )
@@ -165,24 +167,31 @@ struct QueryTests {
         "Complete Query",
         arguments: zip(
             [
-                Query<LaunchDTO>(
+                Query<Launch>(
                     filter: .equals(field: .details, value: "some details"),
                     options: [
                         .populate(fields: [.details])
                     ]
                 ),
-                Query<LaunchDTO>(
+                Query<Launch>(
                     filter: .empty,
                     options: []
-                )
+                ),
+                Query<Launch>(
+                    filter: .empty,
+                    options: [
+                        .sort([.by(.id, .forward), .by(.name, .reverse)]),
+                    ]
+                ),
             ],
             [
                 #"{"options":{"populate":["details"]},"query":{"details":"some details"}}"#,
-                #"{"options":{},"query":{}}"#
+                #"{"options":{},"query":{}}"#,
+                #"{"options":{"sort":[{"id":"asc"},{"name":"desc"}]},"query":{}}"#
             ]
         )
     )
-    func testCompleteQueryEncoding(query: Query<LaunchDTO>, expectedResult: String) async throws {
+    func testCompleteQueryEncoding(query: Query<Launch>, expectedResult: String) async throws {
         let data = try encoder.encode(query)
 
         guard let string = String(data: data, encoding: .utf8) else {
