@@ -1,0 +1,51 @@
+//
+//  Rockets+Query.swift
+//  Core
+//
+//  Created by Dorian on 14/05/2025.
+//
+
+import Networking
+
+public extension Rockets {
+    final class QueryRequest: Rockets, PaginatedRequest, @unchecked Sendable {
+
+        public typealias Item = RocketDTO
+
+        public var body: ProvidedBody
+
+        public override var path: String {
+            super.path + "/query"
+        }
+        public override var method: Networking.Method { .post }
+
+        init(
+            filter: Item.Filter = .empty,
+            options: [Item.Option],
+        ) {
+            body = .init(filter: filter, options: options)
+            super.init()
+        }
+    }
+}
+
+public extension API.Rockets {
+
+    /// Fetches a paginated list of rockets.
+    /// - Parameters:
+    ///   - page: The page number to retrieve.
+    ///   - pageSize: The number of items per page.
+    /// - Returns: A paginated response of rockets.
+    static func fetch(
+        page: Int = 0,
+        pageSize: Int = 20
+    ) async throws -> Rockets.QueryRequest.Response {
+        try await API.shared.send(
+            Rockets.QueryRequest(
+                options: [
+                    .pagination(.init(page: page, pageSize: pageSize))
+                ]
+            )
+        )
+    }
+}
