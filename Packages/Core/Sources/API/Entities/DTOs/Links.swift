@@ -36,4 +36,8 @@ public struct Links: APIModel {
         let imagesContainer = try container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .images)
         images = try imagesContainer.decodeIfPresent("original") ?? imagesContainer.decodeIfPresent("small") ?? []
     }
+
+    public var hasLinks: Bool {
+        return (webcast != nil || wikipedia != nil)
+    }
 }
