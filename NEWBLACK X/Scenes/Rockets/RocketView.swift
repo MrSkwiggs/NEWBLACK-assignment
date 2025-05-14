@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Shared
+import API
 
 struct RocketView: View {
 
@@ -16,7 +16,7 @@ struct RocketView: View {
         StickyHeaderList {
             AsyncGallery(images: rocket.imageURLs)
         } content: {
-            Text(rocket.details)
+            Text(rocket.description)
 
             Section("Details") {
                 LabeledContent {
@@ -38,17 +38,12 @@ struct RocketView: View {
             }
 
             Section("Engines") {
-                if let engines = rocket.engines {
-                    HStack {
-                        Text("\(engines.count)")
-                            .monospacedDigit()
-                        Text(Image(systemName: "multiply"))
-                            .foregroundStyle(.secondary)
-                        Text(engines.type)
-                    }
-                } else {
-                    Text("No engines available")
+                HStack {
+                    Text("\(rocket.engines.count)")
+                        .monospacedDigit()
+                    Text(Image(systemName: "multiply"))
                         .foregroundStyle(.secondary)
+                    Text(rocket.engines.type)
                 }
             }
         }

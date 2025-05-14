@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Shared
+import API
 
 extension LaunchesView {
     struct Row: View {
@@ -15,7 +15,7 @@ extension LaunchesView {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                Text(launch.mission)
+                Text(launch.name)
                     .font(.headline)
 
                 HStack {
@@ -27,20 +27,45 @@ extension LaunchesView {
                     LabelledCapsule {
                         Image(systemName: "mappin.and.ellipse.circle.fill")
                     } label: {
-                        Text(launch.site)
+                        Text(launch.launchpad.name)
                     }
                     LabelledCapsule {
-                        if launch.wasSuccessful {
-                            Image(systemName: "checkmark.circle.fill")
-                        } else {
-                            Image(systemName: "xmark.circle.fill")
-                        }
+                        launchStatusImage
                     } label: {
-                        Text(launch.wasSuccessful ? "Success" : "Failure")
+                        Text(launchStatusText)
                     }
-                    .tint(launch.wasSuccessful ? .green : .red)
+                    .tint(launchStatusTint)
                 }
                 .tint(.secondary)
+            }
+        }
+
+        @ViewBuilder
+        var launchStatusImage: some View {
+            if let isSuccess = launch.isSuccess {
+                if isSuccess {
+                    Image(systemName: "checkmark.circle.fill")
+                } else {
+                    Image(systemName: "xmark.circle.fill")
+                }
+            } else {
+                Image(systemName: "questionmark.circle.fill")
+            }
+        }
+
+        var launchStatusText: String {
+            if let isSuccess = launch.isSuccess {
+                return isSuccess ? "Success" : "Failure"
+            } else {
+                return "Undetermined"
+            }
+        }
+
+        var launchStatusTint: Color {
+            if let isSuccess = launch.isSuccess {
+                return isSuccess ? .green : .red
+            } else {
+                return .blue
             }
         }
     }
@@ -49,8 +74,8 @@ extension LaunchesView {
 import Mocks
 #Preview {
     List {
-        LaunchesView.Row(launch: .kerbalSP)
-        LaunchesView.Row(launch: .kerbalSP2)
+        LaunchesView.Row(launch: .minmusMambo)
+        LaunchesView.Row(launch: .seaOfKerbalDebut)
     }
     .preferredColorScheme(.dark)
 }

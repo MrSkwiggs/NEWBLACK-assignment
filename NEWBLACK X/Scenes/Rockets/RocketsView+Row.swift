@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Shared
+import API
 
 extension RocketsView {
     struct Row: View {

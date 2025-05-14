@@ -24,6 +24,8 @@ struct AsyncGallery<Content: View>: View {
                     LazyHStack(spacing: 0) {
                         ForEach(images, id: \.self) { imageURL in
                             AsyncImage(url: imageURL) { image in
+                                Image(systemName: "photo")
+                                    .foregroundStyle(.secondary)
                                 image
                                     .resizable()
                                     .scaledToFill()
@@ -63,10 +65,10 @@ struct AsyncGallery<Content: View>: View {
 }
 
 import Mocks
-import Shared
+import API
 #Preview {
     StickyHeaderList {
-        AsyncGallery(images: Launch.kerbalSP.imageURLs) {
+        AsyncGallery(images: Rocket.kraken.imageURLs) {
             Text("Hello")
                 .padding()
                 .bold()

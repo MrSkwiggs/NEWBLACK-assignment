@@ -6,23 +6,26 @@
 //
 
 import SwiftUI
-import Shared
+import API
 
 struct LaunchView: View {
 
     let launch: Launch
 
     @State
+    private var rocket: Rocket?
+
+    @State
     private var sheetContent: SheetPresentationContent?
 
     var body: some View {
         StickyHeaderList {
-            AsyncGallery(images: launch.imageURLs) {
+            AsyncGallery(images: launch.links.images) {
                 HStack {
                     Text("Status:")
                         .foregroundStyle(.white.opacity(0.5))
-                    Text(launch.wasSuccessful ? "Success" : "Failure")
-                        .foregroundStyle(launch.wasSuccessful ? .green : .red)
+                    Text(launch.isSuccess == true ? "Success" : "Failure")
+                        .foregroundStyle(launch.isSuccess ?? false ? .green : .red)
                 }
                 .font(.caption)
                 .bold()
@@ -33,21 +36,16 @@ struct LaunchView: View {
                 }
             }
         } content: {
-            Text(launch.summary)
+            Text(launch.details ?? "No details available")
 
             Section("Details") {
-                LabeledContent {
-                    Text(launch.mission)
-                } label: {
-                    Text("Mission")
-                }
                 LabeledContent {
                     Text(launch.date.formatted(date: .long, time: .shortened))
                 } label: {
                     Text("Date")
                 }
                 LabeledContent {
-                    if let url = launch.videoURL {
+                    if let url = launch.links.webcast {
                         Link(destination: url) {
                             HStack {
                                 Text("Watch on Youtube")
@@ -63,8 +61,7 @@ struct LaunchView: View {
             }
 
             Section("Rocket") {
-                if let rocket = launch.rocket {
-
+                if let rocket {
                     Button {
                         sheetContent = .rocket(rocket)
                     } label: {
@@ -72,18 +69,25 @@ struct LaunchView: View {
                     }
                 } else {
                     Text("No rocket available")
+                        .task {
+                            do {
+                                rocket = try await API.Rockets.fetch(byID: launch.rocketID)
+                            } catch {
+                                print("Failed to fetch rocket: \(error)")
+                            }
+                        }
                 }
             }
         }
         .sheet(item: $sheetContent) { item in
             switch item {
-            case let .rocket(name):
-                RocketView(rocket: name)
+            case let .rocket(rocket):
+                RocketView(rocket: rocket)
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
             }
         }
-        .navigationTitle(launch.mission)
+        .navigationTitle(launch.name)
     }
 }
 
@@ -103,5 +107,5 @@ extension LaunchView {
 
 #Preview {
 
-    LaunchView(launch: .kerbalSP)
+    LaunchView(launch: .minmusMambo)
 }
