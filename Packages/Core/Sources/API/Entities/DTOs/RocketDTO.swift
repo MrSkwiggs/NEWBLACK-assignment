@@ -70,7 +70,10 @@ public struct RocketDTO: DTO {
 
         self.engines = try container.decode(EnginesDTO.self, forKey: .engines)
         self.successRate = Double(try container.decode(Int.self, forKey: .successRate)) / 100.0
-        self.firstFlight = try container.decodeIfPresent(Date.self, forKey: .firstFlight)
+        let firstFlightString: String = try container.decode(.firstFlight)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        self.firstFlight = dateFormatter.date(from: firstFlightString)
         self.imageURLs = try container.decode([URL].self, forKey: .imageURLs)
         self.wikipediaURL = try container.decodeIfPresent(URL.self, forKey: .wikipediaURL)
         self.description = try container.decode(String.self, forKey: .description)
