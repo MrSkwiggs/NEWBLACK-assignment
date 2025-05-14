@@ -12,6 +12,7 @@ public extension Query {
         case select(fields: Item.Field.AllCases = Item.Field.allCases)
         case pagination(Pagination)
         case populate(fields: Item.Field.AllCases)
+        case sort([Sort])
 
         func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
             switch self {
@@ -29,6 +30,12 @@ public extension Query {
                 for field in fields {
                     try nested.encode(field.rawValue)
                 }
+
+            case .sort(let sort):
+                var nested = container.nestedUnkeyedContainer(forKey: "sort")
+                for sort in sort {
+                    try nested.encode(sort)
+                }
             }
         }
     }
@@ -42,6 +49,33 @@ public extension Query.Option {
         func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
             try container.encode(page, forKey: "page")
             try container.encode(pageSize, forKey: "limit")
+        }
+    }
+}
+
+public extension Query.Option {
+    struct Sort: Sendable, Equatable, Hashable, Encodable {
+        public let field: Item.Field
+        public let order: SortOrder
+
+        private init(field: Item.Field, order: SortOrder) {
+            self.field = field
+            self.order = order
+        }
+
+        public static func by(_ field: Item.Field, _ order: SortOrder = .forward) -> Sort {
+            .init(field: field, order: order)
+        }
+
+        public func encode(to encoder: any Encoder) throws {
+            var container = encoder.unkeyedContainer()
+            try container.encode(field.rawValue)
+            switch order {
+            case .forward:
+                try container.encode("asc")
+            case .reverse:
+                try container.encode("desc")
+            }
         }
     }
 }
