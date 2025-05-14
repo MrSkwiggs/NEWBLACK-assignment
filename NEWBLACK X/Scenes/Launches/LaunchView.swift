@@ -24,8 +24,8 @@ struct LaunchView: View {
                 HStack {
                     Text("Status:")
                         .foregroundStyle(.white.opacity(0.5))
-                    Text(launch.isSuccess == true ? "Success" : "Failure")
-                        .foregroundStyle(launch.isSuccess ?? false ? .green : .red)
+                    Text(launchStatusLabel)
+                        .foregroundStyle(launchStatusColor)
                 }
                 .font(.caption)
                 .bold()
@@ -44,46 +44,62 @@ struct LaunchView: View {
                 } label: {
                     Text("Date")
                 }
+
                 LabeledContent {
-                    if let url = launch.links.webcast {
-                        Link(destination: url) {
-                            HStack {
-                                Text("Watch on Youtube")
-                                Image(systemName: "play.rectangle")
-                            }
+                    if let rocket {
+                        Button {
+                            sheetContent = .rocket(rocket)
+                        } label: {
+                            Text(rocket.name)
                         }
                     } else {
-                        Text("No video available")
-                    }
-                } label: {
-                    Text("Video")
-                }
-            }
-
-            Section("Rocket") {
-                if let rocket {
-                    Button {
-                        sheetContent = .rocket(rocket)
-                    } label: {
-                        RocketsView.Row(rocket: rocket)
-                    }
-                } else {
-                    Text("No rocket available")
-                        .task {
-                            do {
-                                rocket = try await API.Rockets.fetch(byID: launch.rocketID)
-                            } catch {
-                                print("Failed to fetch rocket: \(error)")
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .task {
+                                do {
+                                    rocket = try await API.Rockets.fetch(byID: launch.rocketID)
+                                } catch {
+                                    print("Failed to fetch rocket: \(error)")
+                                }
                             }
-                        }
+                    }
+                } label: {
+                    Text("Rocket")
+                }
+
+                LabeledContent {
+                    Button {
+                        sheetContent = .launchpad(launch.launchpad)
+                    } label: {
+                        Text(launch.launchpad.name)
+                    }
+                } label: {
+                    Text("Launchpad")
                 }
             }
 
-            Section("Launchpad") {
-                Button {
-                    sheetContent = .launchpad(launch.launchpad)
-                } label: {
-                    Text(launch.launchpad.name)
+            Section("Links") {
+                if launch.links.hasLinks == false {
+                    Text("No links available")
+                        .foregroundStyle(.secondary)
+                }
+
+                if let url = launch.links.webcast {
+                    Link(destination: url) {
+                        HStack {
+                            Image(systemName: "play.rectangle")
+                            Text("Watch the launch")
+                        }
+                    }
+                }
+
+                if let url = launch.links.wikipedia {
+                    Link(destination: url) {
+                        HStack {
+                            Image(systemName: "book")
+                            Text("Read more")
+                        }
+                    }
                 }
             }
         }
@@ -104,6 +120,51 @@ struct LaunchView: View {
             .stickyHeaderListStyle(.small)
         }
         .navigationTitle(launch.name)
+    }
+
+    var launchStatusLabel: String {
+        if launch.isUpcoming {
+            "Upcoming"
+        } else {
+            launch.isSuccess == true ? "Success" : "Failure"
+        }
+    }
+
+    var launchStatusColor: Color {
+        if launch.isUpcoming {
+            return .yellow
+        } else {
+            return launch.isSuccess == true ? .green : .red
+        }
+    }
+
+    @ViewBuilder
+    var description: some View {
+        if let failures = launch.failures, !failures.isEmpty {
+            ForEach(failures, id: \.hashValue) { failure in
+                VStack(alignment: .leading) {
+                    Text("Failure at \(failure.time) seconds")
+                        .foregroundStyle(.secondary)
+                    if let altitude = failure.altitude {
+                        Text("Altitude: \(altitude) km")
+                            .foregroundStyle(.secondary)
+                    }
+                    Text("Reason: \(failure.reason)")
+                        .foregroundStyle(.secondary)
+                }
+                .padding()
+            }
+        } else {
+            if let details = launch.details {
+                Text(details)
+                    .foregroundStyle(.secondary)
+                    .padding()
+            } else {
+                Text("No details available")
+                    .foregroundStyle(.secondary)
+                    .padding()
+            }
+        }
     }
 }
 
