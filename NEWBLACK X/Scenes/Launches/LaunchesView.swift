@@ -18,10 +18,10 @@ struct LaunchesView: View {
     var page: Int? = 0
 
     @State
-    var startDate: Date = Date()
+    var dateRanges: [DateRangeToolbar.Filter] = []
 
     @State
-    var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 7)
+    var filterDateRanges: Bool = false
 
     var body: some View {
         List {
@@ -44,10 +44,39 @@ struct LaunchesView: View {
                         Spacer()
                     }
                 }
+            } else {
+                if launches.isEmpty {
+                    ContentUnavailableView {
+                        Label {
+                            Text("Nothing to see here")
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                        }
+                        .font(.headline)
+                    } description: {
+                        Text("No launches found matching your filters.")
+                    } actions: {
+                        Button("Clear Filters") {
+                            withAnimation {
+                                dateRanges.removeAll()
+                                filterDateRanges = false
+                            }
+
+                            Task {
+                                await refresh()
+                            }
+                        }
+                    }
+
+                }
             }
         }
         .toolbar {
-            DateRangeToolbar(startDate: $startDate, endDate: $endDate)
+            DateRangeToolbar(isActive: $filterDateRanges, filters: $dateRanges) {
+                Task {
+                    await refresh()
+                }
+            }
         }
         .refreshable {
             await refresh()
@@ -65,8 +94,12 @@ struct LaunchesView: View {
 
     private func fetchPage(_ page: Int) async -> [Launch] {
         do {
+            let ranges: Launch.Filter = .or(dateRanges.map {
+                .range(field: .date, range: $0.range)
+            })
             let response = try await API.Launches
                 .query(
+                    filter: filterDateRanges ? ranges : .empty,
                     populate: [.launchpad],
                     sort: [.by(.isUpcoming, .reverse), .by(.date, .reverse)],
                     page: page,
