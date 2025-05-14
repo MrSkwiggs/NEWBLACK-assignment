@@ -38,6 +38,16 @@ struct RocketView: View {
                 } label: {
                     Text("Status")
                 }
+                LabeledContent {
+                    Text(rocket.height.formatted())
+                } label: {
+                    Text("Height")
+                }
+                LabeledContent {
+                    Text(rocket.diameter.formatted())
+                } label: {
+                    Text("Diameter")
+                }
             }
 
             Section("Engines") {
@@ -105,17 +115,26 @@ struct RocketView: View {
                     LabeledContent {
                         Text("\(rocket.engines.isp.seaLevel) s")
                     } label: {
-                        Text("Sea Level")
+                        HStack {
+                            Text(Image(systemName: "water.waves"))
+                                .foregroundStyle(.secondary)
+                            Text("Sea Level")
+                        }
                     }
 
                     LabeledContent {
                         Text("\(rocket.engines.isp.vacuum) s")
                     } label: {
-                        Text("Vacuum")
+                        HStack {
+                            Text(Image(systemName: "circle.dashed"))
+                                .foregroundStyle(.secondary)
+                            Text("Vacuum")
+                        }
                     }
                 }
             }
-            .presentationDetents([.fraction(0.25), .medium])
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
     }
 }
