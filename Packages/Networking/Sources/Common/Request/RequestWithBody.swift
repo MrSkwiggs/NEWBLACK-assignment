@@ -12,7 +12,7 @@ public protocol BodyProvider {
     func body(with encoder: JSONEncoder) throws -> Data
 }
 
-public extension BodyProvider {
+public extension Request where Self: BodyProvider {
     /// The HTTP method for the request. Defaults to POST.
     var method: Method { .post }
 }
