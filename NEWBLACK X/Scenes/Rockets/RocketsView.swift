@@ -60,7 +60,7 @@ struct RocketsView: View {
             let response = try await API.Rockets
                 .fetchAll(page: page)
             self.page = response.nextPage
-            return response.docs
+            return response.items
         } catch {
             print("Error fetching next page of launches: \(error)")
             return []

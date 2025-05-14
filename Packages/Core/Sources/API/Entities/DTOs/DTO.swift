@@ -7,10 +7,7 @@
 
 import Foundation
 
-public protocol APIModel: Sendable, Decodable, Equatable, Hashable {}
-
-
-/// A type that represents an API Model.
+/// A type that represents an API DTO.
 public protocol DTO: APIModel, Identifiable where Field.RawValue == String, Field.AllCases == [Field] {
     /// A type that represents fields of the Model.
     associatedtype Field: DTOField
@@ -18,5 +15,3 @@ public protocol DTO: APIModel, Identifiable where Field.RawValue == String, Fiel
     typealias Filter = Query<Self>.Filter
     typealias Option = Query<Self>.Option
 }
-
-public protocol DTOField: RawRepresentable, Sendable, Hashable, CaseIterable, Equatable {}

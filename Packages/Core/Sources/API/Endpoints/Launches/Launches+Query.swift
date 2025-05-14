@@ -9,6 +9,7 @@ import Foundation
 import Networking
 
 public extension Launches {
+    /// Launches Query endpoint.
     final class QueryRequest: Launches, PaginatedRequest, @unchecked Sendable {
 
         public typealias Item = Launch

@@ -7,16 +7,27 @@
 
 import Foundation
 
+/// A structure representing a launch.
 public struct Launch: DTO {
+    /// The unique identifier of the launch.
     public let id: String
+    /// The date of the launch.
     public let date: Date
+    /// A boolean indicating whether the launch is upcoming.
     public let isUpcoming: Bool
+    /// The name of the launch.
     public let name: String
+    /// The launchpad where the launch takes place.
     public let launchpad: Launchpad
+    /// Various links related to the launch.
     public let links: Links
+    /// The unique identifier of the rocket used in the launch.
     public let rocketID: String
+    /// Whether the launch was successful.
     public let isSuccess: Bool?
+    /// An array of failures associated with the launch, if any.
     public let failures: [Failure]?
+    /// Additional details about the launch, if any.
     public let details: String?
 
     public init(

@@ -73,7 +73,7 @@ struct LaunchesView: View {
                     pageSize: 10
                 )
             self.page = response.nextPage
-            return response.docs
+            return response.items
         } catch {
             print("Error fetching next page of launches: \(error)")
             return []

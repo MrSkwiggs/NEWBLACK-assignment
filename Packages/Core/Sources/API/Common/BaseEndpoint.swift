@@ -8,6 +8,7 @@
 import Foundation
 import Networking
 
+/// Base endpoint for SpaceX API requests.
 public class BaseEndpoint: Endpoint, CustomStringConvertible, @unchecked Sendable {
     public var method: Networking.Method { .get }
     public var scheme: Scheme { .https }

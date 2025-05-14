@@ -9,9 +9,15 @@ import Foundation
 
 public extension Query {
     enum Option: Sendable {
+        /// Selects specific fields to be included in the response.
+        /// - Warning: Use of this option will break the decoding of `Item` if it expects different fields.
         case select(fields: Item.Field.AllCases = Item.Field.allCases)
+        /// Pagination options for the request.
         case pagination(Pagination)
+        /// Populates specific nested fields which would otherwise only return their associated ID.
+        /// - Warning: Use of this option will break the decoding of `Item` if it doesn't expect the given nested fields to be returned in full.
         case populate(fields: Item.Field.AllCases)
+        /// Sorts the results based on the specified fields.
         case sort([Sort])
 
         func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {

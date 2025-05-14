@@ -8,6 +8,7 @@
 import Networking
 
 public extension Rockets {
+    /// Rocket Query endpoint.
     final class QueryRequest: Rockets, PaginatedRequest, @unchecked Sendable {
 
         public typealias Item = Rocket
@@ -55,6 +56,6 @@ public extension API.Rockets {
                 filter: .equals(field: .id, value: rocketID),
                 options: [.pagination(.init(page: 0, pageSize: 1))]
             )
-        ).docs.first
+        ).items.first
     }
 }

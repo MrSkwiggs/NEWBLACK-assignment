@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A data transfer object representing a launchpad.
 public struct Launchpad: DTO {
     public enum Field: String, CodingKey, DTOField {
         case id
@@ -19,12 +20,19 @@ public struct Launchpad: DTO {
         case launches
     }
 
+    /// The unique identifier of the launchpad.
     public let id: String
+    /// The (short) name of the launchpad.
     public let name: String
+    /// The full name of the launchpad.
     public let fullName: String
+    /// An array of image URLs associated with the launchpad.
     public let imageURLs: [URL]
+    /// A string containing details about the launchpad.
     public let details: String
+    /// The status of the launchpad, indicating whether it is active or retired.
     public let status: Status
+    /// The number of launches associated with the launchpad.
     public let launchCount: Int
 
     public init(
@@ -59,8 +67,11 @@ public struct Launchpad: DTO {
 }
 
 public extension Launchpad {
+    /// The Status of a launchpad, indicating whether it is active or retired.
     enum Status: String, APIModel {
+        /// The launchpad is active and operational.
         case active
+        /// The launchpad is no longer in use.
         case retired
     }
 }

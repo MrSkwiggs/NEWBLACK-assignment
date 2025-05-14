@@ -1,5 +1,5 @@
 //
-//  ISPDTO.swift
+//  ISP.swift
 //  Core
 //
 //  Created by Dorian on 13/05/2025.
