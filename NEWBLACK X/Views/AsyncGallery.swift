@@ -55,22 +55,23 @@ struct AsyncGallery<Content: View>: View {
                     .scrollTargetBehavior(.viewAligned)
                 }
             }
-
-            VStack(alignment: .leading) {
-                Spacer()
-                content
+            .overlay {
+                VStack(alignment: .leading) {
+                    Spacer()
+                    content
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background {
+                    LinearGradient(colors: [
+                        .clear,
+                        .clear,
+                        .clear,
+                        .black
+                    ], startPoint: .top, endPoint: .bottom)
+                }
+                .allowsHitTesting(false)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background {
-                LinearGradient(colors: [
-                    .clear,
-                    .clear,
-                    .clear,
-                    .black
-                ], startPoint: .top, endPoint: .bottom)
-            }
-            .allowsHitTesting(false)
         }
     }
 }
