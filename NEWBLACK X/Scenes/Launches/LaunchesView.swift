@@ -18,12 +18,6 @@ struct LaunchesView: View {
     var page: Int? = 0
 
     @State
-    var upcomingLaunches: [Launch] = []
-
-    @State
-    var pastLaunches: [Launch] = []
-
-    @State
     var startDate: Date = Date()
 
     @State
