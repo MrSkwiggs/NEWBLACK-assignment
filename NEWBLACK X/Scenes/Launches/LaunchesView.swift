@@ -6,26 +6,16 @@
 //
 
 import SwiftUI
-import Shared
 import SwiftData
+import API
 
 struct LaunchesView: View {
 
-    @Query
-    var upcomingLaunches: [Launch]
+    @State
+    var upcomingLaunches: [Launch] = []
 
-    @Query
-    var pastLaunches: [Launch]
-
-    init() {
-        let now = Date.now
-        _upcomingLaunches = Query(filter: #Predicate<Launch> {
-            $0.date > now
-        }, sort: \.date, order: .reverse)
-        _pastLaunches = Query(filter: #Predicate<Launch> {
-            $0.date < now
-        }, sort: \.date, order: .reverse)
-    }
+    @State
+    var pastLaunches: [Launch] = []
 
     @State
     var startDate: Date = Date()
@@ -58,6 +48,16 @@ struct LaunchesView: View {
         .toolbar {
             DateRangeToolbar(startDate: $startDate, endDate: $endDate)
         }
+        .task {
+            await withThrowingTaskGroup { group in
+                group.addTask { @MainActor in
+                    self.upcomingLaunches = try await API.Launches.upcoming().docs
+                }
+                group.addTask { @MainActor in
+                    self.pastLaunches = try await API.Launches.past().docs
+                }
+            }
+        }
     }
 }
 
@@ -65,5 +65,4 @@ import Mocks
 
 #Preview {
     LaunchesView()
-        .modelContainer(.previews)
 }

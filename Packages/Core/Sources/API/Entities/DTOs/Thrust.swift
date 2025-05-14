@@ -8,11 +8,16 @@
 import Foundation
 
 /// A type that represents the thrust of an engine, in kN
-public struct ThrustDTO: APIModel {
+public struct Thrust: APIModel {
     /// The thrust of the engine at sea level
     let seaLevel: Measurement<UnitForce>
     /// The thrust of the engine in vacuum
     let vacuum: Measurement<UnitForce>
+
+    package init(seaLevel: Measurement<UnitForce>, vacuum: Measurement<UnitForce>) {
+        self.seaLevel = seaLevel
+        self.vacuum = vacuum
+    }
 
     enum CodingKeys: String, CodingKey {
         case thrustSeaLevel = "thrust_sea_level"

@@ -10,7 +10,7 @@ import Networking
 public extension Launches {
     final class QueryRequest: Launches, PaginatedRequest, @unchecked Sendable {
 
-        public typealias Item = LaunchDTO
+        public typealias Item = Launch
         
         public var body: ProvidedBody
 
@@ -40,9 +40,9 @@ public extension API.Launches {
     ///   - pageSize: The number of items per page.
     /// - Returns: A paginated response containing the queried launches.
     static func query(
-        filter: LaunchDTO.Filter = .empty,
-        select: LaunchDTO.Field.AllCases = LaunchDTO.Field.allCases,
-        populate: LaunchDTO.Field.AllCases = [],
+        filter: Launch.Filter = .empty,
+        select: Launch.Field.AllCases = Launch.Field.allCases,
+        populate: Launch.Field.AllCases = [],
         page: Int,
         pageSize: Int
     ) async throws -> Launches.QueryRequest.Response {

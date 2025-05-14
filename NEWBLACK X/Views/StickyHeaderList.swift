@@ -12,7 +12,11 @@ struct StickyHeaderList<Header: View, Content: View>: View {
     let header: Header
     let content: Content
 
-    @State private var offset: CGFloat = 0
+    @State
+    private var offset: CGFloat = 0
+
+    @State
+    private var scaleEffect: CGFloat = 1
 
     init(
         @ViewBuilder header: () -> Header,
@@ -24,24 +28,25 @@ struct StickyHeaderList<Header: View, Content: View>: View {
 
     var body: some View {
         GeometryReader { reader in
-            ZStack(alignment: .top) {
                 List {
+                    Section {
+                    } header: {
+                        header
+                            .listRowInsets(.init(top: -20, leading: 0, bottom: 0, trailing: 0))
+                            .frame(width: reader.size.width, height: 320)
+                            .scaleEffect(x: scaleEffect, y: scaleEffect, anchor: .bottom)
+                    }
                     content
                 }
-                .safeAreaPadding(.top, 300 - reader.safeAreaInsets.top)
                 .onScrollGeometryChange(for: CGFloat.self, of: { geo in
                     return geo.contentOffset.y + geo.contentInsets.top
                 }, action: { new, old in
                     offset = new
                 })
-
-                header
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: reader.size.width, height: 300 + max(0, -offset))
-                    .clipped()
-                    .ignoresSafeArea(.all, edges: .top)
-                    .transformEffect(.init(translationX: 0, y: -(max(0, offset + reader.safeAreaInsets.top))))
-            }
+                .ignoresSafeArea(.all, edges: .top)
+                .onChange(of: offset) {
+                    scaleEffect = max(1, 1 + (-offset / reader.size.height * (reader.size.height / 300)))
+                }
         }
     }
 }

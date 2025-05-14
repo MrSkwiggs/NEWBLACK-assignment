@@ -8,11 +8,16 @@
 import Foundation
 
 /// A type that represents the ISP (Specific Impulse) of an engine, in seconds
-public struct ISPDTO: APIModel {
+public struct ISP: APIModel {
     /// The ISP of the engine at sea level, in seconds
     let seaLevel: Int
     /// The ISP of the engine in vacuum, in seconds
     let vacuum: Int
+
+    package init(seaLevel: Int, vacuum: Int) {
+        self.seaLevel = seaLevel
+        self.vacuum = vacuum
+    }
 
     enum CodingKeys: String, CodingKey {
         case seaLevel = "sea_level"

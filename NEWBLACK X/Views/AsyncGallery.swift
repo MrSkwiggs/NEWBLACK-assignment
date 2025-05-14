@@ -20,53 +20,98 @@ struct AsyncGallery<Content: View>: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             GeometryReader { reader in
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 0) {
-                        ForEach(images, id: \.self) { imageURL in
-                            AsyncImage(url: imageURL) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .clipped()
-                            } placeholder: {
-                                ZStack {
-                                    Rectangle()
-                                        .fill(.tertiary)
-                                    ProgressView()
-                                }
-                            }
-                            .frame(width: reader.size.width, height: reader.size.height)
-                        }
+                if images.isEmpty {
+                    ZStack {
+                        Rectangle()
+                            .fill(.tertiary)
+                        Image(systemName: "photo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                            .foregroundStyle(.quaternary)
                     }
-                    .scrollTargetLayout()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 0) {
+                            ForEach(images, id: \.self) { imageURL in
+                                AsyncImage(url: imageURL) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .clipped()
+                                } placeholder: {
+                                    ZStack(alignment: .center) {
+                                        Rectangle()
+                                            .fill(.tertiary)
+                                        ProgressView()
+                                    }
+                                }
+                                .frame(width: reader.size.width, height: reader.size.height)
+                            }
+                        }
+                        .scrollTargetLayout()
+                    }
+                    .scrollTargetBehavior(.viewAligned)
                 }
-                .scrollTargetBehavior(.viewAligned)
             }
-
-            VStack(alignment: .leading) {
-                Spacer()
-                content
+            .overlay {
+                VStack(alignment: .leading) {
+                    Spacer()
+                    content
+                }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background {
+                    LinearGradient(colors: [
+                        .clear,
+                        .clear,
+                        .clear,
+                        .black
+                    ], startPoint: .top, endPoint: .bottom)
+                }
+                .allowsHitTesting(false)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background {
-                LinearGradient(colors: [
-                    .clear,
-                    .clear,
-                    .clear,
-                    .black
-                ], startPoint: .top, endPoint: .bottom)
-            }
-            .allowsHitTesting(false)
         }
     }
 }
 
 import Mocks
-import Shared
-#Preview {
+import API
+
+#Preview("With Image") {
     StickyHeaderList {
-        AsyncGallery(images: Launch.kerbalSP.imageURLs) {
+        AsyncGallery(images: Rocket.kraken.imageURLs) {
+            Text("Hello")
+                .padding()
+                .bold()
+                .foregroundStyle(.white)
+        }
+    } content: {
+        ForEach(0..<100) { index in
+            Text("Item \(index)")
+        }
+    }
+}
+
+#Preview("Loading Image") {
+    StickyHeaderList {
+        AsyncGallery(images: [.temporaryDirectory]) {
+            Text("Hello")
+                .padding()
+                .bold()
+                .foregroundStyle(.white)
+        }
+    } content: {
+        ForEach(0..<100) { index in
+            Text("Item \(index)")
+        }
+    }
+}
+
+#Preview("Without Image") {
+    StickyHeaderList {
+        AsyncGallery(images: []) {
             Text("Hello")
                 .padding()
                 .bold()

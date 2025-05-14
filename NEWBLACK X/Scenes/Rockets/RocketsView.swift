@@ -7,12 +7,12 @@
 
 import SwiftUI
 import SwiftData
-import Shared
+import API
 
 struct RocketsView: View {
 
-    @Query
-    var rockets: [Rocket]
+    @State
+    var rockets: [Rocket] = []
 
     var body: some View {
         List {
@@ -24,11 +24,17 @@ struct RocketsView: View {
                 }
             }
         }
+        .task {
+            do {
+                self.rockets = try await API.Rockets.fetchAll().docs
+            } catch {
+                print("Error fetching rockets: \(error)")
+            }
+        }
     }
 }
 
 import Mocks
 #Preview {
-    RocketsView()
-        .modelContainer(.previews)
+    RocketsView(rockets: [.falcon9, .kraken])
 }

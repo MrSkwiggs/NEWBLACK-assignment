@@ -6,64 +6,65 @@
 //
 
 import Foundation
-import Shared
+import API
 
-@MainActor
+nonisolated(unsafe) private let isoFormatter = ISO8601DateFormatter()
+
 public extension Launch {
-    static let kerbalSP: Launch = .init(
-        id: UUID().uuidString,
-        mission: "Kerbal Space Program",
-        launchSite: "Unity",
-        date: Date(timeIntervalSince1970: 1_308_898_208),
-        wasSuccessful: true,
-        summary: "First fully reusable test flight of the Kerbal Mk.I rocket. Achieved stable orbit around Mun before safe reentry.",
-        videoURL: URL(string: "https://youtu.be/AtmtP4vouSY"),
-        imageURLs: ["https://live.staticflickr.com/65535/51676939646_1a12780e54_o.jpg",
-                    "https://live.staticflickr.com/65535/51677186188_e03e87ae8e_o.jpg",
-                    "https://live.staticflickr.com/65535/51676136297_0bbb893f44_o.jpg",
-                    "https://live.staticflickr.com/65535/51677822295_87c2ee94b1_o.jpg",
-                    "https://live.staticflickr.com/65535/51677186098_12c8f54593_o.jpg",
-                    "https://live.staticflickr.com/65535/51676136282_5118fa42ef_o.jpg"].compactMap { URL(string: $0) },
-        rocket: .kraken
+    static let munaholicAchievement = Launch(
+        id: "L-001",
+        date: isoFormatter.date(from: "2023-04-12T09:15:00Z")!,
+        isUpcoming: false,
+        name: "Munaholic Achievement",
+        launchpad: .alpha,
+        links: .munaholic,
+        rocketID: "Falcon9-KSP",
+        isSuccess: true,
+        failures: nil,
+        details: "Jebediah Kerman nailed his precision landing within 10 meters of the planting flag. 👏"
     )
 
-    static let kerbalSP2: Launch = .init(
-        id: UUID().uuidString,
-        mission: "Kerbal Space Program 2",
-        launchSite: "Unity",
-        date: Date(timeIntervalSince1970: 1_677_138_608),
-        wasSuccessful: false,
-        summary: "Second-generation launch aimed at deep-space trajectory. Engine anomaly during second-stage burn led to mission abort.",
-        rocket: .jebsJoyride
+    static let seaOfKerbalDebut = Launch(
+        id: "L-002",
+        date: isoFormatter.date(from: "2024-11-05T18:30:00Z")!,
+        isUpcoming: false,
+        name: "Sea of Kerbal Debut",
+        launchpad: .beta,
+        links: .splashdown,
+        rocketID: "FalconHeavy-KSP",
+        isSuccess: false,
+        failures: [
+            Failure(time: 420, altitude: 12000, reason: "Grid fins malfunction—vehicle pirouetted into the briny deep")
+        ],
+        details: "Big props to Bob Kerman for waving at the cameras as we sank gracefully. 🚢💥"
     )
 
-    static let kittenSP: Launch = .init(
-        id: UUID().uuidString,
-        mission: "Kitten Space Program",
-        launchSite: "BRUTAL",
-        date: Date(timeIntervalSince1970: 1_799_740_469),
-        wasSuccessful: true,
-        summary: "Innovative CubeSat mission carrying live kittens to test zero-G life support. All systems nominal, returned safely.",
-        rocket: .dunaExpress
+    static let minmusMambo = Launch(
+        id: "L-003",
+        date: isoFormatter.date(from: "2025-07-01T14:00:00Z")!,
+        isUpcoming: true,
+        name: "Minmus Mambo Extravaganza",
+        launchpad: .delta,
+        links: .none,
+        rocketID: "Starship-KSP",
+        isSuccess: nil,
+        failures: nil,
+        details: "Payload: 100 kilos of Jeb’s leftover Mun samples + inflatable dance floor for Minmus surface boogie."
     )
 
-    static let novaXPress: Launch = .init(
-        id: UUID().uuidString,
-        mission: "Nova X Press",
-        launchSite: "Cape Novel",
-        date: Date(timeIntervalSince1970: 1_602_414_400),
-        wasSuccessful: true,
-        summary: "Rapid-response resupply to orbital station Nova-3. Demonstrated ultra-fast turnaround between missions.",
-        rocket: .mechjeb
-    )
-
-    static let redDawn: Launch = .init(
-        id: UUID().uuidString,
-        mission: "Red Dawn Probe",
-        launchSite: "Red Rock Plateau",
-        date: Date(timeIntervalSince1970: 1_721_200_000),
-        wasSuccessful: false,
-        summary: "Deep-space probe intended for Mars surface sample return. Lost telemetry after cruise phase, vehicle presumed lost.",
-        rocket: .munWalker
+    static let krakenUnleashed = Launch(
+        id: "L-004",
+        date: isoFormatter.date(from: "2024-02-29T00:00:00Z")!,
+        isUpcoming: false,
+        name: "Kraken Unleashed",
+        launchpad: .omega,
+        links: .kraken,
+        rocketID: "Falcon1-KSP",
+        isSuccess: false,
+        failures: [
+            Failure(time: 15, altitude: 100, reason: "Fuel piping vacuum greed attracted literal Kraken tentacles"),
+            Failure(time: 15, altitude: 100, reason: "Kraken detached booster mid-liftoff")
+        ],
+        details: "Turns out, don’t mix leftover fuel from Jool missions with standard kerosene. Lesson learned the hard way."
     )
 }
