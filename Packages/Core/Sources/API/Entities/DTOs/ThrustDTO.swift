@@ -21,8 +21,10 @@ public struct ThrustDTO: APIModel {
 
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let thrustSeaLevel: Int = try container.decode(.thrustSeaLevel)
-        let thrustVacuum: Int = try container.decode(.thrustVacuum)
+        let seaLevelContainer = try container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .thrustSeaLevel)
+        let thrustSeaLevel: Int = try seaLevelContainer.decode("kN")
+        let vacuumContainer = try container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .thrustVacuum)
+        let thrustVacuum: Int = try vacuumContainer.decode("kN")
         seaLevel = .init(value: Double(thrustSeaLevel), unit: .kiloNewton)
         vacuum = .init(value: Double(thrustVacuum), unit: .kiloNewton)
     }
