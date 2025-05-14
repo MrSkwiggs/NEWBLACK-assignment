@@ -139,7 +139,7 @@ struct QueryTests {
                 #"{"select":["id","name"]}"#,
                 #"{"populate":["launchpad","rocket"]}"#,
                 #"{"limit":20,"page":3}"#,
-                #"{"sort":[{"id":"asc"},{"name":"desc"}]}"#
+                #"{"sort":[["id","asc"],["name","desc"]]}"#
             ]
         )
     )
@@ -187,7 +187,7 @@ struct QueryTests {
             [
                 #"{"options":{"populate":["details"]},"query":{"details":"some details"}}"#,
                 #"{"options":{},"query":{}}"#,
-                #"{"options":{"sort":[{"id":"asc"},{"name":"desc"}]},"query":{}}"#
+                #"{"options":{"sort":[["id","asc"],["name","desc"]]},"query":{}}"#
             ]
         )
     )
