@@ -12,6 +12,12 @@ import API
 struct LaunchesView: View {
 
     @State
+    var launches: [Launch] = []
+
+    @State
+    var page: Int? = 0
+
+    @State
     var upcomingLaunches: [Launch] = []
 
     @State
@@ -25,22 +31,23 @@ struct LaunchesView: View {
 
     var body: some View {
         List {
-            Section("Upcoming") {
-                ForEach(upcomingLaunches) { launch in
-                    NavigationLink {
-                        LaunchView(launch: launch)
-                    } label: {
-                        Row(launch: launch)
-                    }
+            ForEach(launches) { launch in
+                NavigationLink {
+                    LaunchView(launch: launch)
+                } label: {
+                    Row(launch: launch)
                 }
             }
-
-            Section("Past") {
-                ForEach(pastLaunches) { launch in
-                    NavigationLink {
-                        LaunchView(launch: launch)
-                    } label: {
-                        Row(launch: launch)
+            if page != nil {
+                Section {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .task {
+                                await fetchNextPage()
+                            }
+                        Spacer()
                     }
                 }
             }
@@ -48,15 +55,34 @@ struct LaunchesView: View {
         .toolbar {
             DateRangeToolbar(startDate: $startDate, endDate: $endDate)
         }
-        .task {
-            await withThrowingTaskGroup { group in
-                group.addTask { @MainActor in
-                    self.upcomingLaunches = try await API.Launches.upcoming().docs
-                }
-                group.addTask { @MainActor in
-                    self.pastLaunches = try await API.Launches.past().docs
-                }
-            }
+        .refreshable {
+            await refresh()
+        }
+    }
+
+    private func refresh() async {
+        self.launches = await fetchPage(0)
+    }
+
+    private func fetchNextPage() async {
+        guard let page else { return }
+        self.launches.append(contentsOf: await fetchPage(page))
+    }
+
+    private func fetchPage(_ page: Int) async -> [Launch] {
+        do {
+            let response = try await API.Launches
+                .query(
+                    populate: [.launchpad],
+                    sort: [.by(.isUpcoming, .reverse), .by(.date, .reverse)],
+                    page: page,
+                    pageSize: 10
+                )
+            self.page = response.nextPage
+            return response.docs
+        } catch {
+            print("Error fetching next page of launches: \(error)")
+            return []
         }
     }
 }
