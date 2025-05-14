@@ -65,5 +65,4 @@ import Mocks
 
 #Preview {
     LaunchesView()
-        .modelContainer(.previews)
 }
