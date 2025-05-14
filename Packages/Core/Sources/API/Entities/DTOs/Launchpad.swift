@@ -11,6 +11,7 @@ public struct Launchpad: DTO {
     public enum Field: String, CodingKey, DTOField {
         case id
         case name
+        case fullName = "full_name"
         case imageURLs = "images"
         case location
         case details
@@ -29,6 +30,7 @@ public struct Launchpad: DTO {
     public init(
         id: String,
         name: String,
+        fullName: String,
         imageURLs: [URL] = [],
         details: String,
         status: Status,
@@ -36,7 +38,7 @@ public struct Launchpad: DTO {
     ) {
         self.id = id
         self.name = name
-        self.fullName = name
+        self.fullName = fullName
         self.imageURLs = imageURLs
         self.details = details
         self.status = status
@@ -47,7 +49,7 @@ public struct Launchpad: DTO {
         let container = try decoder.container(keyedBy: Field.self)
         self.id = try container.decode(.id)
         self.name = try container.decode(.name)
-        self.fullName = try container.decode(.name)
+        self.fullName = try container.decode(.fullName)
         let imageContainer = try container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .imageURLs)
         imageURLs = try imageContainer.decode("large")
         details = try container.decode(.details)

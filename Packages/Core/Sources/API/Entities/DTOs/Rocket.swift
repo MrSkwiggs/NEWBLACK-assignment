@@ -36,6 +36,36 @@ public struct Rocket: DTO {
     /// A description of the Rocket.
     public let description: String
 
+    package init(
+        id: String,
+        name: String,
+        type: String,
+        isActive: Bool,
+        mass: Measurement<UnitMass>,
+        height: Measurement<UnitLength>,
+        diameter: Measurement<UnitLength>,
+        engines: Engines,
+        successRate: Double,
+        firstFlight: Date? = nil,
+        imageURLs: [URL],
+        wikipediaURL: URL? = nil,
+        description: String
+    ) {
+        self.id = id
+        self.name = name
+        self.type = type
+        self.isActive = isActive
+        self.mass = mass
+        self.height = height
+        self.diameter = diameter
+        self.engines = engines
+        self.successRate = successRate
+        self.firstFlight = firstFlight
+        self.imageURLs = imageURLs
+        self.wikipediaURL = wikipediaURL
+        self.description = description
+    }
+
     public enum Field: String, CodingKey, DTOField {
         case id
         case name

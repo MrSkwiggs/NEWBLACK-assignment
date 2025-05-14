@@ -14,6 +14,11 @@ public struct Thrust: APIModel {
     /// The thrust of the engine in vacuum
     let vacuum: Measurement<UnitForce>
 
+    package init(seaLevel: Measurement<UnitForce>, vacuum: Measurement<UnitForce>) {
+        self.seaLevel = seaLevel
+        self.vacuum = vacuum
+    }
+
     enum CodingKeys: String, CodingKey {
         case thrustSeaLevel = "thrust_sea_level"
         case thrustVacuum = "thrust_vacuum"

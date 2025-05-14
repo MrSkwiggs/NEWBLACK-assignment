@@ -14,6 +14,11 @@ public struct ISP: APIModel {
     /// The ISP of the engine in vacuum, in seconds
     let vacuum: Int
 
+    package init(seaLevel: Int, vacuum: Int) {
+        self.seaLevel = seaLevel
+        self.vacuum = vacuum
+    }
+
     enum CodingKeys: String, CodingKey {
         case seaLevel = "sea_level"
         case vacuum
