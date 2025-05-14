@@ -33,8 +33,8 @@ struct RocketView: View {
                     Text("Type")
                 }
                 LabeledContent {
-                    Text(rocket.isActive ? "Active" : "Inactive")
-                        .foregroundStyle(rocket.isActive ? .green : .red)
+                    Text(rocket.isActive ? "Active" : "Retired")
+                        .foregroundStyle(rocket.isActive ? .green : .purple)
                 } label: {
                     Text("Status")
                 }
