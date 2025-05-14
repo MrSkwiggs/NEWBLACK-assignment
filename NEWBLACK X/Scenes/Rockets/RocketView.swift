@@ -39,6 +39,12 @@ struct RocketView: View {
                     Text("Status")
                 }
                 LabeledContent {
+                    Text(rocket.successRate, format: .percent)
+                        .foregroundStyle(successRateColor)
+                } label: {
+                    Text("Success Rate")
+                }
+                LabeledContent {
                     Text(rocket.height.formatted())
                 } label: {
                     Text("Height")
@@ -136,6 +142,11 @@ struct RocketView: View {
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
         }
+    }
+
+    private var successRateColor: Color {
+        [Color.red, .orange, .green]
+            .interpolateColor(at: rocket.successRate) ?? .secondary
     }
 }
 
