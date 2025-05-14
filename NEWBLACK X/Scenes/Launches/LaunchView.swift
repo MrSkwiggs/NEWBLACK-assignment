@@ -78,14 +78,30 @@ struct LaunchView: View {
                         }
                 }
             }
+
+            Section("Launchpad") {
+                Button {
+                    sheetContent = .launchpad(launch.launchpad)
+                } label: {
+                    Text(launch.launchpad.name)
+                }
+            }
         }
         .sheet(item: $sheetContent) { item in
-            switch item {
-            case let .rocket(rocket):
-                RocketView(rocket: rocket)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
+            Group {
+                switch item {
+                case let .rocket(rocket):
+                    RocketView(rocket: rocket)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
+
+                case let .launchpad(launchpad):
+                    LaunchpadView(launchpad: launchpad)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
+                }
             }
+            .stickyHeaderListStyle(.small)
         }
         .navigationTitle(launch.name)
     }
@@ -94,11 +110,14 @@ struct LaunchView: View {
 extension LaunchView {
     enum SheetPresentationContent: Identifiable {
         case rocket(Rocket)
+        case launchpad(Launchpad)
 
         var id: String {
             switch self {
             case .rocket(let rocket):
                 return rocket.id
+            case .launchpad(let launchpad):
+                return launchpad.id
             }
         }
 
