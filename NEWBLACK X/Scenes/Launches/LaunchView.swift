@@ -94,7 +94,9 @@ struct LaunchView: View {
                 }
 
                 if let url = launch.links.wikipedia {
-                    Link(destination: url) {
+                    Button {
+                        sheetContent = .link(url)
+                    } label: {
                         HStack {
                             Image(systemName: "book")
                             Text("Read more")
@@ -108,16 +110,16 @@ struct LaunchView: View {
                 switch item {
                 case let .rocket(rocket):
                     RocketView(rocket: rocket)
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.visible)
-
                 case let .launchpad(launchpad):
                     LaunchpadView(launchpad: launchpad)
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.visible)
+                case let .link(url):
+                    WebView(url: url)
+                        .ignoresSafeArea()
                 }
             }
             .stickyHeaderListStyle(.small)
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         .navigationTitle(launch.name)
     }
@@ -172,6 +174,7 @@ extension LaunchView {
     enum SheetPresentationContent: Identifiable {
         case rocket(Rocket)
         case launchpad(Launchpad)
+        case link(URL)
 
         var id: String {
             switch self {
@@ -179,6 +182,8 @@ extension LaunchView {
                 return rocket.id
             case .launchpad(let launchpad):
                 return launchpad.id
+            case .link(let url):
+                return url.absoluteString
             }
         }
 
