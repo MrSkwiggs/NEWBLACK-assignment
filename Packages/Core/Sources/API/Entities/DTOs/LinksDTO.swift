@@ -8,8 +8,8 @@
 import Foundation
 
 public struct LinksDTO: APIModel {
-    public let webcast: URL
-    public let wikipedia: URL
+    public let webcast: URL?
+    public let wikipedia: URL?
 
     public init(
         webcast: URL,
