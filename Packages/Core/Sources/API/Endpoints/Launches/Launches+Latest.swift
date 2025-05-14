@@ -10,7 +10,7 @@ import Networking
 
 public extension Launches {
     final class Latest: Launches, Request, @unchecked Sendable {
-        public typealias Response = LaunchDTO
+        public typealias Response = Launch
 
         public override var path: String {
             super.path + "/latest"

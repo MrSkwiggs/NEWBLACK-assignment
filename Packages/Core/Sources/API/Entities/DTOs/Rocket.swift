@@ -8,7 +8,7 @@
 import Foundation
 
 /// A type that represents a Rocket.
-public struct RocketDTO: DTO {
+public struct Rocket: DTO {
     /// The ID of the Rocket.
     public let id: String
     /// The name of the Rocket.
@@ -24,7 +24,7 @@ public struct RocketDTO: DTO {
     /// The diameter of the Rocket.
     public let diameter: Measurement<UnitLength>
     /// The engine configuration of the Rocket.
-    public let engines: EnginesDTO
+    public let engines: Engines
     /// The success rate of the Rocket, expressed as a percentage.
     public let successRate: Double
     /// When the Rocket performed its first flight.
@@ -68,7 +68,7 @@ public struct RocketDTO: DTO {
         let diameterContainer = try container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .diameter)
         self.diameter = .init(value: try diameterContainer.decode("meters"), unit: .meters)
 
-        self.engines = try container.decode(EnginesDTO.self, forKey: .engines)
+        self.engines = try container.decode(Engines.self, forKey: .engines)
         self.successRate = Double(try container.decode(Int.self, forKey: .successRate)) / 100.0
         let firstFlightString: String = try container.decode(.firstFlight)
         let dateFormatter = DateFormatter()

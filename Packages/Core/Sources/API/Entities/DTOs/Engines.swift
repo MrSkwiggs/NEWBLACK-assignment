@@ -8,11 +8,11 @@
 import Foundation
 
 /// A type that represents the engines of a rocket
-public struct EnginesDTO: APIModel {
+public struct Engines: APIModel {
     /// The ISP of the engine
-    let isp: ISPDTO
+    let isp: ISP
     /// The thrust of the engine
-    let thrust: ThrustDTO
+    let thrust: Thrust
     /// The number of engines
     let number: Int
     /// The type of the engine

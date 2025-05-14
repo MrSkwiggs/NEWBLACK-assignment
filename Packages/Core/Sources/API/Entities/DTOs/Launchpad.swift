@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LaunchpadDTO: DTO {
+public struct Launchpad: DTO {
     public enum Field: String, CodingKey, DTOField {
         case id
         case name
@@ -56,7 +56,7 @@ public struct LaunchpadDTO: DTO {
     }
 }
 
-public extension LaunchpadDTO {
+public extension Launchpad {
     enum Status: String, APIModel {
         case active
         case retired

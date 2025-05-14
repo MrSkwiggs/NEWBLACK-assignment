@@ -7,16 +7,16 @@
 
 import Foundation
 
-public struct LaunchDTO: DTO {
+public struct Launch: DTO {
     public let id: String
     public let date: Date
     public let isUpcoming: Bool
     public let name: String
-    public let launchpad: LaunchpadDTO
-    public let links: LinksDTO
+    public let launchpad: Launchpad
+    public let links: Links
     public let rocketID: String
     public let isSuccess: Bool?
-    public let failures: [FailureDTO]?
+    public let failures: [Failure]?
     public let details: String?
 
     public init(
@@ -24,11 +24,11 @@ public struct LaunchDTO: DTO {
         date: Date,
         isUpcoming: Bool,
         name: String,
-        launchpad: LaunchpadDTO,
-        links: LinksDTO,
+        launchpad: Launchpad,
+        links: Links,
         rocketID: String,
         isSuccess: Bool?,
-        failures: [FailureDTO]?,
+        failures: [Failure]?,
         details: String?
     ) {
         self.id = id

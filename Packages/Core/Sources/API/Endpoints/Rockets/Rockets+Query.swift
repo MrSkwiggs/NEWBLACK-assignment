@@ -10,7 +10,7 @@ import Networking
 public extension Rockets {
     final class QueryRequest: Rockets, PaginatedRequest, @unchecked Sendable {
 
-        public typealias Item = RocketDTO
+        public typealias Item = Rocket
 
         public var body: ProvidedBody
 

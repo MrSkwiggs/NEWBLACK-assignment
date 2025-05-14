@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct LinksDTO: APIModel {
+public struct Links: APIModel {
     public let webcast: URL?
     public let wikipedia: URL?
 
