@@ -13,36 +13,94 @@ struct DateRangeToolbar: ToolbarContent {
     private var showDatePicker = false
 
     @Binding
-    var startDate: Date
+    var isActive: Bool
 
     @Binding
-    var endDate: Date
+    var filters: [Filter]
+
+    @State
+    var startDate: Date = .now
+
+    @State
+    var endDate: Date = .now
+
+    let onCommit: () -> Void
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
                 showDatePicker.toggle()
             }) {
-                Image(systemName: "calendar")
-                    .font(.title)
-                    .foregroundColor(.blue)
+                Image(systemName: "line.3.horizontal.decrease.circle.fill")
             }
             .popover(isPresented: $showDatePicker) {
                 datePicker
-                    .presentationCompactAdaptation(.popover)
+                    .presentationDetents([.medium, .large])
+                    .onDisappear {
+                        onCommit()
+                    }
             }
         }
     }
 
     private var datePicker: some View {
-        VStack {
-            Text("Filter Launch Dates")
-                .padding(.bottom, 8)
-            DatePicker("Start Date", selection: $startDate, displayedComponents: [.date])
+        List {
+            Toggle(isOn: $isActive) {
+                Text("Enable Filter")
+            }
+            Section("Select Date Range") {
+                DatePicker("Start", selection: $startDate, displayedComponents: [.date])
 
-            DatePicker("End Date", selection: $endDate, displayedComponents: [.date])
+                DatePicker("End", selection: $endDate, displayedComponents: [.date])
+
+                Button("Add Date Range") {
+                    withAnimation {
+                        let range = startDate..<endDate
+                        filters.append(.init(range: range))
+                        isActive = true
+                        startDate = .now
+                        endDate = .now
+                    }
+                }
+            }
+
+            Section {
+                if filters.isEmpty {
+                    Text("No date ranges - Create one to filter launches.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(filters) { filter in
+                        HStack {
+                            Text(filter.range.lowerBound.formatted(date: .numeric, time: .omitted))
+                            Text(" - ")
+                                .foregroundStyle(.secondary)
+                            Text(filter.range.upperBound.formatted(date: .numeric, time: .omitted))
+                        }
+                    }
+                    .onDelete { index in
+                        filters.remove(atOffsets: index)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text("Date Ranges")
+                    Spacer()
+                    Button("Clear all") {
+                        withAnimation {
+                            filters.removeAll()
+                        }
+                    }
+                    .textCase(nil)
+                    .font(.callout)
+                }
+            }
         }
-        .padding()
+    }
+
+    struct Filter: Hashable, Equatable, Identifiable {
+        let id = UUID()
+
+        let range: Range<Date>
     }
 }
 
@@ -50,16 +108,16 @@ struct DateRangeToolbar: ToolbarContent {
 
     @Previewable
     @State
-    var startDate = Date()
+    var filters: [DateRangeToolbar.Filter] = []
 
     @Previewable
     @State
-    var endDate = Date().addingTimeInterval(60 * 60 * 24 * 7)
+    var isActive: Bool = false
 
     NavigationStack {
         Text("Hello, World!")
             .toolbar {
-                DateRangeToolbar(startDate: $startDate, endDate: $endDate)
+                DateRangeToolbar(isActive: $isActive, filters: $filters) {}
             }
     }
 }
