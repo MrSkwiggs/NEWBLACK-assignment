@@ -7,9 +7,12 @@
 
 import Foundation
 
+/// A query to apply to outgoing requests.
 public struct Query<Item: DTO>: Sendable, Encodable {
-    let filter: Filter
-    let options: [Option]
+    /// The type of filter to apply to the query.
+    public let filter: Filter
+    /// The type of options to apply to the query.
+    public let options: [Option]
 
 
     /// Creates a query with the given filter and options.
