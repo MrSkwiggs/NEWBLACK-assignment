@@ -35,6 +35,16 @@ public extension Query {
 
         /// The absence of a filter.
         public static var empty: Filter { .and([]) }
+        public var isEmpty: Bool {
+            switch self {
+            case .and(let filters):
+                return filters.isEmpty
+            case .or(let filters):
+                return filters.isEmpty
+            default:
+                return false
+            }
+        }
 
         var value: AnyEncodable? {
             switch self {

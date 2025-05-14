@@ -37,7 +37,11 @@ public struct Query<Item: DTO>: Sendable, Encodable {
 
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.filter, forKey: .filter)
+        if filter.isEmpty {
+            try container.encode([String: String](), forKey: .filter)
+        } else {
+            try container.encode(self.filter, forKey: .filter)
+        }
 
         var optionsContainer = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: .options)
         for option in options {
