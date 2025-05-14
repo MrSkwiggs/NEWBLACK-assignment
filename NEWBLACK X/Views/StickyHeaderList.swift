@@ -41,6 +41,7 @@ struct StickyHeaderList<Header: View, Content: View>: View {
                     .clipped()
                     .ignoresSafeArea(.all, edges: .top)
                     .transformEffect(.init(translationX: 0, y: -(max(0, offset + reader.safeAreaInsets.top))))
+                    .allowsHitTesting(false)
             }
         }
     }
