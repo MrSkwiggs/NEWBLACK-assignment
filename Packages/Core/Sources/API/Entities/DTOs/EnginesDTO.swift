@@ -41,6 +41,6 @@ public struct EnginesDTO: APIModel {
         type = try container.decode(.type)
         propellant1 = try container.decode(.propellant1)
         propellant2 = try container.decode(.propellant2)
-        thrustToWeightRatio = try container.decode(.thrustToWeight)
+        thrustToWeightRatio = try container.decodeInt(.thrustToWeight)
     }
 }
