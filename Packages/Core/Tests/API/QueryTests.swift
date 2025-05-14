@@ -170,10 +170,15 @@ struct QueryTests {
                     options: [
                         .populate(fields: [.details])
                     ]
+                ),
+                Query<LaunchDTO>(
+                    filter: .empty,
+                    options: []
                 )
             ],
             [
-                #"{"options":{"populate":["details"]},"query":{"details":"some details"}}"#
+                #"{"options":{"populate":["details"]},"query":{"details":"some details"}}"#,
+                #"{"options":{},"query":{}}"#
             ]
         )
     )
