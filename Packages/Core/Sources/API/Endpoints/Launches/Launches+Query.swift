@@ -57,4 +57,45 @@ public extension API.Launches {
             )
         )
     }
+
+
+    /// Returns a paginated list of upcoming launches.
+    /// - Parameters:
+    ///   - page: The page number to retrieve.
+    ///   - pageSize: The number of items per page.
+    /// - Returns: A paginated response containing upcoming launches.
+    static func upcoming(
+        page: Int = 0,
+        pageSize: Int = 20
+    ) async throws -> Launches.QueryRequest.Response {
+        try await API.shared.send(
+            Launches.QueryRequest(
+                filter: .equals(field: .isUpcoming, value: true),
+                options: [
+                    .pagination(.init(page: page, pageSize: pageSize)),
+                    .populate(fields: [.launchpad])
+                ]
+            )
+        )
+    }
+
+    /// Returns a paginated list of past launches.
+    /// - Parameters:
+    ///  - page: The page number to retrieve.
+    ///  - pageSize: The number of items per page.
+    /// - Returns: A paginated response containing past launches.
+    static func past(
+        page: Int = 0,
+        pageSize: Int = 20
+    ) async throws -> Launches.QueryRequest.Response {
+        try await API.shared.send(
+            Launches.QueryRequest(
+                filter: .equals(field: .isUpcoming, value: false),
+                options: [
+                    .pagination(.init(page: page, pageSize: pageSize)),
+                    .populate(fields: [.launchpad])
+                ]
+            )
+        )
+    }
 }
