@@ -36,7 +36,7 @@ public extension API.Rockets {
     ///   - page: The page number to retrieve.
     ///   - pageSize: The number of items per page.
     /// - Returns: A paginated response of rockets.
-    static func fetch(
+    static func fetchAll(
         page: Int = 0,
         pageSize: Int = 20
     ) async throws -> Rockets.QueryRequest.Response {
@@ -47,5 +47,14 @@ public extension API.Rockets {
                 ]
             )
         )
+    }
+
+    static func fetch(byID rocketID: String) async throws -> Rocket? {
+        try await API.shared.send(
+            Rockets.QueryRequest(
+                filter: .equals(field: .id, value: rocketID),
+                options: [.pagination(.init(page: 0, pageSize: 1))]
+            )
+        ).docs.first
     }
 }
