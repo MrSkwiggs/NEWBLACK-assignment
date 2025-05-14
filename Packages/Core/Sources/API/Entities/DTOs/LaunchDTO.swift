@@ -43,7 +43,7 @@ public struct LaunchDTO: DTO {
         self.details = details
     }
 
-    public enum Field: String, CodingKey, Sendable, Hashable, CaseIterable, Equatable {
+    public enum Field: String, CodingKey, DTOField {
         case id
         case date = "date_unix"
         case isUpcoming = "upcoming"

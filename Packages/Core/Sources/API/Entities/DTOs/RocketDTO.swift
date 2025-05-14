@@ -36,7 +36,7 @@ public struct RocketDTO: DTO {
     /// A description of the Rocket.
     public let description: String
 
-    public enum Field: String, CodingKey, Sendable, Hashable, CaseIterable, Equatable {
+    public enum Field: String, CodingKey, DTOField {
         case id
         case name
         case type
