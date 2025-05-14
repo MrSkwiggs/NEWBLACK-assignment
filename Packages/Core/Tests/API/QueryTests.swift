@@ -131,7 +131,7 @@ struct QueryTests {
         arguments: zip(
             [
                 Option.select(fields: [.id, .name]),
-                Option.populate(fields: [.launchpadID, .rocketID]),
+                Option.populate(fields: [.launchpad, .rocketID]),
                 Option.pagination(.init(page: 3, pageSize: 20))
             ],
             [

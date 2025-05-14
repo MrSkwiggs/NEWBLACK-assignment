@@ -12,7 +12,7 @@ public struct LaunchDTO: DTO {
     public let date: Date
     public let isUpcoming: Bool
     public let name: String
-    public let launchpadID: String
+    public let launchpad: LaunchpadDTO
     public let links: LinksDTO
     public let rocketID: String
     public let isSuccess: Bool?
@@ -24,7 +24,7 @@ public struct LaunchDTO: DTO {
         date: Date,
         isUpcoming: Bool,
         name: String,
-        launchpadID: String,
+        launchpad: LaunchpadDTO,
         links: LinksDTO,
         rocketID: String,
         isSuccess: Bool?,
@@ -35,7 +35,7 @@ public struct LaunchDTO: DTO {
         self.date = date
         self.isUpcoming = isUpcoming
         self.name = name
-        self.launchpadID = launchpadID
+        self.launchpad = launchpad
         self.links = links
         self.rocketID = rocketID
         self.isSuccess = isSuccess
@@ -48,7 +48,7 @@ public struct LaunchDTO: DTO {
         case date = "date_unix"
         case isUpcoming = "upcoming"
         case name
-        case launchpadID = "launchpad"
+        case launchpad = "launchpad"
         case links
         case rocketID = "rocket"
         case isSuccess = "success"
@@ -62,7 +62,7 @@ public struct LaunchDTO: DTO {
         self.date = try container.decode(.date)
         self.isUpcoming = try container.decode(.isUpcoming)
         self.name = try container.decode(.name)
-        self.launchpadID = try container.decode(.launchpadID)
+        self.launchpad = try container.decode(.launchpad)
         self.links = try container.decode(.links)
         self.rocketID = try container.decode(.rocketID)
         self.isSuccess = try container.decodeIfPresent(.isSuccess)
