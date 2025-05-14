@@ -57,7 +57,7 @@ extension LaunchesView {
             if let isSuccess = launch.isSuccess {
                 return isSuccess ? "Success" : "Failure"
             } else {
-                return "Undetermined"
+                return "Upcoming"
             }
         }
 
@@ -65,7 +65,7 @@ extension LaunchesView {
             if let isSuccess = launch.isSuccess {
                 return isSuccess ? .green : .red
             } else {
-                return .blue
+                return .yellow
             }
         }
     }
@@ -76,6 +76,7 @@ import Mocks
     List {
         LaunchesView.Row(launch: .minmusMambo)
         LaunchesView.Row(launch: .seaOfKerbalDebut)
+        LaunchesView.Row(launch: .munaholicAchievement)
     }
     .preferredColorScheme(.dark)
 }
