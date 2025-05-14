@@ -8,17 +8,30 @@
 import Foundation
 
 public extension Query {
+    /// A filter to apply to a query.
+    /// 
+    /// The filter can be used to filter items based on their fields and values.
+    /// It supports various operations such as equality, containment, and range filtering.
+    /// It can also be combined using logical operators like AND and OR.
     enum Filter: Sendable, Encodable {
+        /// A filter that checks if a field is equal to a value.
         case equals(field: Item.Field, value: any QueryFilterable)
+        /// A filter that checks if a field is any of the specified values.
         case contains(field: Item.Field, values: [any QueryFilterable])
+        /// A filter that checks if a field is less than or equal to the given value.
         case lessThan(field: Item.Field, value: any QueryFilterable, inclusive: Bool = false)
+        /// A filter that checks if a field is greater than or equal to the given value.
         case greaterThan(field: Item.Field, value: any QueryFilterable, inclusive: Bool = false)
 
+        /// A filter that combines multiple filters using the logical AND operator.
         case and([Filter])
+        /// A filter that combines multiple filters using the logical OR operator.
         case or([Filter])
 
+        /// A filter that combines multiple filters for a specific field.
         case compound(field: Item.Field, filters: [Filter])
 
+        /// Creates a filter that checks if a field is contained in the given range.
         static func range<T: Comparable & QueryComparable>(field: Item.Field, range: Range<T>) -> Filter {
             .compound(field: field, filters: [
                 .lessThan(field: field, value: range.upperBound, inclusive: false),
@@ -26,6 +39,7 @@ public extension Query {
             ])
         }
 
+        /// Creates a filter that checks if a field is contained in the given closed range.
         static func range<T: Comparable & QueryComparable>(field: Item.Field, range: ClosedRange<T>) -> Filter {
             .compound(field: field, filters: [
                 .lessThan(field: field, value: range.upperBound, inclusive: true),
@@ -35,6 +49,8 @@ public extension Query {
 
         /// The absence of a filter.
         public static var empty: Filter { .and([]) }
+
+        /// Whether the filter is empty.
         public var isEmpty: Bool {
             switch self {
             case .and(let filters):
@@ -126,7 +142,6 @@ public extension Query {
                 for filter in filters {
                     try nested.encode(filter)
                 }
-
             case .compound(_, let filters):
                 var nested = container.nestedContainer(keyedBy: DynamicCodingKey.self, forKey: operatorKey)
                 for filter in filters {

@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// A type-erased wrapper for `Encodable` values. This allows you to store any
+/// `Encodable` type in a single collection or pass it around without knowing
+/// its concrete type.
 public struct AnyEncodable: Encodable {
     private let _encode: (Encoder) throws -> Void
 

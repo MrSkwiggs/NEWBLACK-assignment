@@ -9,6 +9,7 @@ import Foundation
 import Networking
 
 public extension Launches {
+    /// Latest Launch endpoint.
     final class Latest: Launches, Request, @unchecked Sendable {
         public typealias Response = Launch
 

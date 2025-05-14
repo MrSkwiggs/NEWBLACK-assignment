@@ -14,6 +14,9 @@ struct RocketsView: View {
     @State
     var rockets: [Rocket] = []
 
+    @State
+    var page: Int? = 0
+
     var body: some View {
         List {
             ForEach(rockets) { rocket in
@@ -23,13 +26,44 @@ struct RocketsView: View {
                     Row(rocket: rocket)
                 }
             }
-        }
-        .task {
-            do {
-                self.rockets = try await API.Rockets.fetchAll().docs
-            } catch {
-                print("Error fetching rockets: \(error)")
+
+            if page != nil {
+                Section {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .task {
+                                await fetchNextPage()
+                            }
+                        Spacer()
+                    }
+                }
             }
+        }
+        .refreshable {
+            await refresh()
+        }
+    }
+
+    private func refresh() async {
+        self.rockets = await fetchPage(0)
+    }
+
+    private func fetchNextPage() async {
+        guard let page else { return }
+        self.rockets.append(contentsOf: await fetchPage(page))
+    }
+
+    private func fetchPage(_ page: Int) async -> [Rocket] {
+        do {
+            let response = try await API.Rockets
+                .fetchAll(page: page)
+            self.page = response.nextPage
+            return response.items
+        } catch {
+            print("Error fetching next page of launches: \(error)")
+            return []
         }
     }
 }

@@ -39,7 +39,6 @@ struct AsyncGallery<Content: View>: View {
                                     image
                                         .resizable()
                                         .scaledToFill()
-                                        .clipped()
                                 } placeholder: {
                                     ZStack(alignment: .center) {
                                         Rectangle()
@@ -48,6 +47,7 @@ struct AsyncGallery<Content: View>: View {
                                     }
                                 }
                                 .frame(width: reader.size.width, height: reader.size.height)
+                                .clipped()
                             }
                         }
                         .scrollTargetLayout()

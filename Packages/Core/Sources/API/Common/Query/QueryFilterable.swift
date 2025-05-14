@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A type that can be used for query filtering.
 public protocol QueryFilterable: Sendable, Equatable, Codable {}
 
 extension String: QueryFilterable {}

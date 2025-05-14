@@ -5,9 +5,11 @@
 //  Created by Dorian on 13/05/2025.
 //
 
+import Foundation
 import Networking
 
 public extension Launches {
+    /// Launches Query endpoint.
     final class QueryRequest: Launches, PaginatedRequest, @unchecked Sendable {
 
         public typealias Item = Launch
@@ -43,6 +45,7 @@ public extension API.Launches {
         filter: Launch.Filter = .empty,
         select: Launch.Field.AllCases = Launch.Field.allCases,
         populate: Launch.Field.AllCases = [],
+        sort: [Launch.Option.Sort] = [],
         page: Int,
         pageSize: Int
     ) async throws -> Launches.QueryRequest.Response {
@@ -52,7 +55,8 @@ public extension API.Launches {
                 options: [
                     .pagination(.init(page: page, pageSize: pageSize)),
                     .select(fields: select),
-                    .populate(fields: populate)
+                    .populate(fields: populate),
+                    .sort(sort)
                 ]
             )
         )
@@ -65,6 +69,7 @@ public extension API.Launches {
     ///   - pageSize: The number of items per page.
     /// - Returns: A paginated response containing upcoming launches.
     static func upcoming(
+        sort: [Launch.Option.Sort] = [.by(.date, .reverse)],
         page: Int = 0,
         pageSize: Int = 20
     ) async throws -> Launches.QueryRequest.Response {
@@ -73,7 +78,8 @@ public extension API.Launches {
                 filter: .equals(field: .isUpcoming, value: true),
                 options: [
                     .pagination(.init(page: page, pageSize: pageSize)),
-                    .populate(fields: [.launchpad])
+                    .populate(fields: [.launchpad]),
+                    .sort(sort)
                 ]
             )
         )
@@ -85,6 +91,7 @@ public extension API.Launches {
     ///  - pageSize: The number of items per page.
     /// - Returns: A paginated response containing past launches.
     static func past(
+        sort: [Launch.Option.Sort] = [.by(.date, .reverse)],
         page: Int = 0,
         pageSize: Int = 20
     ) async throws -> Launches.QueryRequest.Response {
@@ -93,7 +100,8 @@ public extension API.Launches {
                 filter: .equals(field: .isUpcoming, value: false),
                 options: [
                     .pagination(.init(page: page, pageSize: pageSize)),
-                    .populate(fields: [.launchpad])
+                    .populate(fields: [.launchpad]),
+                    .sort(sort)
                 ]
             )
         )

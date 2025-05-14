@@ -9,9 +9,16 @@ import Foundation
 
 public extension Query {
     enum Option: Sendable {
+        /// Selects specific fields to be included in the response.
+        /// - Warning: Use of this option will break the decoding of `Item` if it expects different fields.
         case select(fields: Item.Field.AllCases = Item.Field.allCases)
+        /// Pagination options for the request.
         case pagination(Pagination)
+        /// Populates specific nested fields which would otherwise only return their associated ID.
+        /// - Warning: Use of this option will break the decoding of `Item` if it doesn't expect the given nested fields to be returned in full.
         case populate(fields: Item.Field.AllCases)
+        /// Sorts the results based on the specified fields.
+        case sort([Sort])
 
         func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
             switch self {
@@ -29,19 +36,13 @@ public extension Query {
                 for field in fields {
                     try nested.encode(field.rawValue)
                 }
+
+            case .sort(let sort):
+                var nested = container.nestedUnkeyedContainer(forKey: "sort")
+                for sort in sort {
+                    try nested.encode(sort)
+                }
             }
-        }
-    }
-}
-
-public extension Query.Option {
-    struct Pagination: Sendable, Equatable, Hashable {
-        let page: Int
-        let pageSize: Int
-
-        func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
-            try container.encode(page, forKey: "page")
-            try container.encode(pageSize, forKey: "limit")
         }
     }
 }

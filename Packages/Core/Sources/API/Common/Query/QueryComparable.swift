@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A type that can be used for query comparisons.
 public protocol QueryComparable: QueryFilterable, Comparable {}
 
 extension String: QueryComparable {}

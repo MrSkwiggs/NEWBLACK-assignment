@@ -51,5 +51,7 @@ public class UnitForce: Dimension, @unchecked Sendable {
     /// `1 ozf = 0.2780139 N`
     public static let ounceForce = UnitForce(symbol: "ozf", converter: UnitConverterLinear(coefficient: 0.2780139))
 
-    public static let baseUnit: UnitForce = .newton
+    public override class func baseUnit() -> Self {
+        return Self.newton as! Self
+    }
 }
