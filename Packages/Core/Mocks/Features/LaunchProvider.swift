@@ -48,8 +48,13 @@ public actor MockLaunchProvider: LaunchProviding {
         atPage page: Int,
         filters: [DateRangeFilter]
     ) async throws -> Paginated<Launch> {
-        let response = pages.isEmpty ? .success(.empty()) : pages.removeFirst()
+        let response = pages.isEmpty ? .success(.empty()) : pages.first!
 
+        defer {
+            if case .success = pages.first {
+                pages.removeFirst()
+            }
+        }
         return try await handler { [hookLaunches] in
             try hookLaunches(page, filters, response).get()
         }
