@@ -20,48 +20,20 @@ struct LaunchesView: View {
 
     var body: some View {
         List {
-            ForEach(model.launches) { launch in
-                NavigationLink {
-                    LaunchView(model: viewModelFactory.launchViewModel(for: launch))
-                } label: {
-                    Row(launch: launch)
-                }
-            }
-            if model.hasNextPage {
-                Section {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .task {
-                                model.pageLoaderDidAppear()
-                            }
-                        Spacer()
-                    }
-                }
-            } else {
-                if model.launches.isEmpty {
-                    ContentUnavailableView {
-                        Label {
-                            Text("Nothing to see here")
-                        } icon: {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                        }
-                        .font(.headline)
-                    } description: {
-                        Text("No launches found matching your filters.")
-                    } actions: {
-                        Button("Clear Filters") {
-                            withAnimation {
-                                model.userDidPressClearFilters()
-                            }
-                        }
-                    }
+            switch model.state {
+            case let .loading(previousLaunches):
+                placeholders(for: previousLaunches)
 
-                }
+            case let .loaded(launches):
+                content(for: launches)
+
+            case .noContent:
+                noContent()
+
+            case .error:
+                error()
             }
         }
-        .redacted(reason: model.showSkeleton ? [.placeholder] : [])
         .toolbar {
             DateRangeToolbar(
                 isFilterActive: model.isFilterActive,
@@ -85,17 +57,99 @@ struct LaunchesView: View {
         }
         .animation(.default, value: model.isFilterActive)
     }
+
+    @ViewBuilder
+    private func placeholders(for launches: [Launch]) -> some View {
+        rows(for: launches)
+            .redacted(reason: .placeholder)
+    }
+
+    @ViewBuilder
+    private func content(for launches: [Launch]) -> some View {
+        rows(for: launches)
+        if model.hasNextPage {
+            Section {
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .task {
+                            model.pageLoaderDidAppear()
+                        }
+                    Spacer()
+                }
+            }
+
+        }
+    }
+
+    @ViewBuilder
+    private func noContent() -> some View {
+        ContentUnavailableView {
+            Label {
+                Text("Nothing to see here")
+            } icon: {
+                Image(systemName: "exclamationmark.triangle.fill")
+            }
+            .font(.headline)
+        } description: {
+            Text("No launches found matching your filters.")
+        } actions: {
+            Button("Clear Filters") {
+                withAnimation {
+                    model.userDidPressClearFilters()
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func error() -> some View {
+        ContentUnavailableView {
+            Label {
+                Text("An error occurred")
+            } icon: {
+                Image(systemName: "exclamationmark.triangle.fill")
+            }
+            .font(.headline)
+            .foregroundStyle(.red)
+        } description: {
+            Text("Please try again later.")
+        } actions: {
+            Button("Retry") {
+                Task {
+                    await model.refresh()
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func rows(for launches: [Launch]) -> some View {
+        ForEach(launches) { launch in
+            NavigationLink {
+                LaunchView(model: viewModelFactory.launchViewModel(for: launch))
+            } label: {
+                Row(launch: launch)
+            }
+        }
+    }
 }
 
 import Mocks
 #Preview {
     LaunchesView(model: .init(launchProvider: MockLaunchProvider.success(), filterProvider: MockFilterProvider.empty))
+        .environmentObject(ViewModelFactory())
 }
 
 #Preview("Empty") {
     LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty(), filterProvider: MockFilterProvider.empty))
+        .environmentObject(ViewModelFactory())
 }
 
 #Preview("Error") {
-    LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure(), filterProvider: MockFilterProvider.empty))
+    NavigationStack {
+        LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure(), filterProvider: MockFilterProvider.empty))
+    }
+    .environmentObject(ViewModelFactory())
 }
