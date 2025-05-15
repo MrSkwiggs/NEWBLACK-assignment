@@ -32,7 +32,7 @@ public extension Query {
         case compound(field: Item.Field, filters: [Filter])
 
         /// Creates a filter that checks if a field is contained in the given range.
-        static func range<T: Comparable & QueryComparable>(field: Item.Field, range: Range<T>) -> Filter {
+        public static func range<T: Comparable & QueryComparable>(field: Item.Field, range: Range<T>) -> Filter {
             .compound(field: field, filters: [
                 .lessThan(field: field, value: range.upperBound, inclusive: false),
                 .greaterThan(field: field, value: range.lowerBound, inclusive: true)
@@ -40,7 +40,7 @@ public extension Query {
         }
 
         /// Creates a filter that checks if a field is contained in the given closed range.
-        static func range<T: Comparable & QueryComparable>(field: Item.Field, range: ClosedRange<T>) -> Filter {
+        public static func range<T: Comparable & QueryComparable>(field: Item.Field, range: ClosedRange<T>) -> Filter {
             .compound(field: field, filters: [
                 .lessThan(field: field, value: range.upperBound, inclusive: true),
                 .greaterThan(field: field, value: range.lowerBound, inclusive: true)

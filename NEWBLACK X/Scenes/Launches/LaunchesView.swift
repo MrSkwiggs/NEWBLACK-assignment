@@ -18,10 +18,16 @@ struct LaunchesView: View {
     var page: Int? = 0
 
     @State
-    var startDate: Date = Date()
+    var dateRanges: [DateRangeFilter.Filter] = []
 
     @State
-    var endDate: Date = Date().addingTimeInterval(60 * 60 * 24 * 7)
+    var filterDateRanges: Bool = false
+
+    @State
+    var showDateRangeFilter: Bool = false
+
+    @State
+    var showSkeleton: Bool = false
 
     var body: some View {
         List {
@@ -44,17 +50,65 @@ struct LaunchesView: View {
                         Spacer()
                     }
                 }
+            } else {
+                if launches.isEmpty {
+                    ContentUnavailableView {
+                        Label {
+                            Text("Nothing to see here")
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                        }
+                        .font(.headline)
+                    } description: {
+                        Text("No launches found matching your filters.")
+                    } actions: {
+                        Button("Clear Filters") {
+                            withAnimation {
+                                filterDateRanges = false
+                            }
+
+                            Task {
+                                await refresh()
+                            }
+                        }
+                    }
+
+                }
             }
         }
+        .redacted(reason: showSkeleton ? [.placeholder] : [])
         .toolbar {
-            DateRangeToolbar(startDate: $startDate, endDate: $endDate)
+            DateRangeToolbar(
+                isFilterActive: filterDateRanges,
+                showDateRangeFilter: $showDateRangeFilter
+            ) {
+                filterDateRanges = false
+                Task {
+                    await refresh()
+                }
+            }
         }
         .refreshable {
             await refresh()
         }
+        .popover(isPresented: $showDateRangeFilter) {
+            DateRangeFilter(
+                isActive: $filterDateRanges,
+                filters: $dateRanges
+            )
+            .presentationDetents([.medium, .large])
+            .onDisappear {
+                Task {
+                    await refresh()
+                }
+            }
+        }
+        .animation(.default, value: filterDateRanges)
     }
 
     private func refresh() async {
+        showSkeleton = true
+        defer { showSkeleton = false }
         self.launches = await fetchPage(0)
     }
 
@@ -65,8 +119,12 @@ struct LaunchesView: View {
 
     private func fetchPage(_ page: Int) async -> [Launch] {
         do {
+            let ranges: Launch.Filter = .or(dateRanges.map {
+                .range(field: .date, range: $0.range)
+            })
             let response = try await API.Launches
                 .query(
+                    filter: filterDateRanges ? ranges : .empty,
                     populate: [.launchpad],
                     sort: [.by(.isUpcoming, .reverse), .by(.date, .reverse)],
                     page: page,

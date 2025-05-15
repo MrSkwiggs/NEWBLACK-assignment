@@ -9,40 +9,40 @@ import SwiftUI
 
 struct DateRangeToolbar: ToolbarContent {
 
-    @State
-    private var showDatePicker = false
+    let isFilterActive: Bool
 
     @Binding
-    var startDate: Date
+    var showDateRangeFilter: Bool
 
-    @Binding
-    var endDate: Date
+    let disableFilter: () -> Void
 
     var body: some ToolbarContent {
+        if isFilterActive {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    disableFilter()
+                }) {
+                    Text("Clear")
+                }
+            }
+        }
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
-                showDatePicker.toggle()
+                showDateRangeFilter.toggle()
             }) {
-                Image(systemName: "calendar")
-                    .font(.title)
-                    .foregroundColor(.blue)
+                Image(systemName:
+                        isFilterActive
+                      ? "line.3.horizontal.decrease.circle.fill"
+                      : "line.3.horizontal.decrease.circle"
+                )
             }
-            .popover(isPresented: $showDatePicker) {
-                datePicker
-                    .presentationCompactAdaptation(.popover)
-            }
+            .navigationTitle(
+                isFilterActive
+                ? "Filtered by date"
+                : ""
+            )
+            .navigationBarTitleDisplayMode(.inline)
         }
-    }
-
-    private var datePicker: some View {
-        VStack {
-            Text("Filter Launch Dates")
-                .padding(.bottom, 8)
-            DatePicker("Start Date", selection: $startDate, displayedComponents: [.date])
-
-            DatePicker("End Date", selection: $endDate, displayedComponents: [.date])
-        }
-        .padding()
     }
 }
 
@@ -50,16 +50,15 @@ struct DateRangeToolbar: ToolbarContent {
 
     @Previewable
     @State
-    var startDate = Date()
-
-    @Previewable
-    @State
-    var endDate = Date().addingTimeInterval(60 * 60 * 24 * 7)
+    var isActive: Bool = false
 
     NavigationStack {
         Text("Hello, World!")
             .toolbar {
-                DateRangeToolbar(startDate: $startDate, endDate: $endDate)
+                DateRangeToolbar(
+                    isFilterActive: isActive,
+                    showDateRangeFilter: .constant(false)
+                ) {}
             }
     }
 }
