@@ -23,6 +23,9 @@ public extension Query {
         func encode(to container: inout KeyedEncodingContainer<DynamicCodingKey>) throws {
             switch self {
             case .select(let fields):
+                guard !fields.isEmpty && fields != Item.Field.allCases else {
+                    return
+                }
                 var nested = container.nestedUnkeyedContainer(forKey: "select")
                 for field in fields {
                     try nested.encode(field.rawValue)
