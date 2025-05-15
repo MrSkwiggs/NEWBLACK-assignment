@@ -1,0 +1,24 @@
+name: Build & Test
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: macos-latest
+    name: Build and Test
+
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v4
+
+    - name: Set up Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_16.2.app
+
+    - name: Build and test
+      run: |
+        xcodebuild \
+          -project "NEWBLACK X.xcodeproj" \
+          -scheme "NEWBLACK X" \
+          -testPlan TestPlan \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          clean test
