@@ -8,11 +8,11 @@
 import Foundation
 
 /// A protocol that allows to check if an optional value is nil.
-protocol AnyOptional {
+package protocol AnyOptional {
     /// Whether the optional value is nil or not.
     var isNil: Bool { get }
 }
 
 extension Optional: AnyOptional {
-    var isNil: Bool { self == nil }
+    package var isNil: Bool { self == nil }
 }
