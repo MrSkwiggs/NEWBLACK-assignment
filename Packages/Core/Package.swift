@@ -18,13 +18,15 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(path: "../Networking")
+        .package(path: "../Networking"),
+        .package(url: "https://github.com/hmlongco/Factory", .upToNextMinor(from: "2.5.0"))
     ],
     targets: [
         .target(
             name: "Shared",
             dependencies: [
-                "API"
+                "API",
+                "Factory"
             ],
             path: "Sources/Shared"
         ),
