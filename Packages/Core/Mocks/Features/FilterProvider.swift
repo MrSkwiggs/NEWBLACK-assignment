@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import Entities
 
 @MainActor
 public final class MockFilterProvider: FilterProviding {

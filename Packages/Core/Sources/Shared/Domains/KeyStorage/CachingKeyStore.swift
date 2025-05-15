@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 /// A Keystore that only keeps its data for a limited time.
 ///
