@@ -46,7 +46,7 @@ struct KeyStoreUserDefaultsTests {
     @Test func defaultsReceiveData() async throws {
         let expectedValue = "testValue"
         let expectedData = try encoder.encode(expectedValue)
-        withKnownIssue {
+        withKnownIssue(isIntermittent: true) {
             try keyStore.set(expectedValue, for: expectedKey)
 
             #expect(try keyStore.get(for: expectedKey) == expectedValue)
@@ -68,7 +68,7 @@ struct KeyStoreUserDefaultsTests {
         let expectedValue = "testValue"
         let expectedData = try encoder.encode(expectedValue)
 
-        withKnownIssue {
+        withKnownIssue(isIntermittent: true) {
             try keyStore.set(expectedValue, for: expectedKey)
 
             #expect(try keyStore.get(for: expectedKey) == expectedValue)
@@ -101,7 +101,7 @@ struct KeyStoreUserDefaultsTests {
         try keyStore.set(value2, for: TestValue2.key)
         try keyStore.set(value3, for: TestValue3.key)
 
-        withKnownIssue {
+        withKnownIssue(isIntermittent: true) {
             #expect(defaults.data(forKey: TestValue1.key.identifier) != nil)
             #expect(defaults.data(forKey: TestValue2.key.identifier) != nil)
             #expect(defaults.data(forKey: TestValue3.key.identifier) != nil)
