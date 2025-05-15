@@ -12,7 +12,11 @@ import Foundation
 public actor MockLaunchProvider: LaunchProviding {
     private var replies: [Result<Paginated<Launch>, Error>]
     private let hookLaunches: (_ page: Int, _ filters: [DateRangeFilter]) -> Void
-
+    
+    /// Creates a mock provider with the given replies.
+    /// - Parameters:
+    ///   - replies: A list of success / failures to return.
+    ///   - hookLaunches: This closure is called during the `fetch` method. It can be used as a hook when performing tests, validating that certain parameters are passed or that the function is called.
     public init(
         replies: [Result<Paginated<Launch>, Error>],
         hookLaunches: @escaping (_ page: Int, _ filters: [DateRangeFilter]) -> Void = { _, _ in }
