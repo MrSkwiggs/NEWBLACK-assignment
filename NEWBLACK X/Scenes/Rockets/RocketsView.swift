@@ -12,14 +12,11 @@ import Entities
 struct RocketsView: View {
 
     @State
-    var rockets: [Rocket] = []
-
-    @State
-    var page: Int? = 0
+    var model: Model
 
     var body: some View {
         List {
-            ForEach(rockets) { rocket in
+            ForEach(model.rockets) { rocket in
                 NavigationLink {
                     RocketView(rocket: rocket)
                 } label: {
@@ -27,14 +24,14 @@ struct RocketsView: View {
                 }
             }
 
-            if page != nil {
+            if model.hasNextPage {
                 Section {
                     HStack {
                         Spacer()
                         ProgressView()
                             .progressViewStyle(.circular)
                             .task {
-                                await fetchNextPage()
+                                model.pageLoaderDidAppear()
                             }
                         Spacer()
                     }
@@ -42,33 +39,13 @@ struct RocketsView: View {
             }
         }
         .refreshable {
-            await refresh()
-        }
-    }
-
-    private func refresh() async {
-        self.rockets = await fetchPage(0)
-    }
-
-    private func fetchNextPage() async {
-        guard let page else { return }
-        self.rockets.append(contentsOf: await fetchPage(page))
-    }
-
-    private func fetchPage(_ page: Int) async -> [Rocket] {
-        do {
-            let response = try await API.Rockets
-                .fetchAll(page: page)
-            self.page = response.nextPage
-            return response.items
-        } catch {
-            print("Error fetching next page of launches: \(error)")
-            return []
+            await model.refresh()
         }
     }
 }
 
 import Mocks
+
 #Preview {
-    RocketsView(rockets: [.falcon9, .kraken])
+    RocketsView(model: .init(rocketProvider: MockRocketProvider.success))
 }
