@@ -18,10 +18,13 @@ struct LaunchesView: View {
     var page: Int? = 0
 
     @State
-    var dateRanges: [DateRangeToolbar.Filter] = []
+    var dateRanges: [DateRangeFilter.Filter] = []
 
     @State
     var filterDateRanges: Bool = false
+
+    @State
+    var showDateRangeFilter: Bool = false
 
     var body: some View {
         List {
@@ -72,7 +75,11 @@ struct LaunchesView: View {
             }
         }
         .toolbar {
-            DateRangeToolbar(isActive: $filterDateRanges, filters: $dateRanges) {
+            DateRangeToolbar(
+                isFilterActive: filterDateRanges,
+                showDateRangeFilter: $showDateRangeFilter
+            ) {
+                filterDateRanges = false
                 Task {
                     await refresh()
                 }
@@ -81,6 +88,19 @@ struct LaunchesView: View {
         .refreshable {
             await refresh()
         }
+        .popover(isPresented: $showDateRangeFilter) {
+            DateRangeFilter(
+                isActive: $filterDateRanges,
+                filters: $dateRanges
+            )
+            .presentationDetents([.medium, .large])
+            .onDisappear {
+                Task {
+                    await refresh()
+                }
+            }
+        }
+        .animation(.default, value: filterDateRanges)
     }
 
     private func refresh() async {

@@ -9,106 +9,44 @@ import SwiftUI
 
 struct DateRangeToolbar: ToolbarContent {
 
-    @State
-    private var showDatePicker = false
+    let isFilterActive: Bool
 
     @Binding
-    var isActive: Bool
+    var showDateRangeFilter: Bool
 
-    @Binding
-    var filters: [Filter]
-
-    @State
-    var startDate: Date = .now
-
-    @State
-    var endDate: Date = .now
-
-    let onCommit: () -> Void
+    let disableFilter: () -> Void
 
     var body: some ToolbarContent {
+        if isFilterActive {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    disableFilter()
+                }) {
+                    Text("Clear")
+                }
+            }
+        }
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
-                showDatePicker.toggle()
+                showDateRangeFilter.toggle()
             }) {
-                Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                Image(systemName:
+                        isFilterActive
+                      ? "line.3.horizontal.decrease.circle.fill"
+                      : "line.3.horizontal.decrease.circle"
+                )
             }
-            .popover(isPresented: $showDatePicker) {
-                datePicker
-                    .presentationDetents([.medium, .large])
-                    .onDisappear {
-                        onCommit()
-                    }
-            }
+            .navigationTitle(
+                isFilterActive
+                ? "Filtered by date"
+                : ""
+            )
+            .navigationBarTitleDisplayMode(.inline)
         }
-    }
-
-    private var datePicker: some View {
-        List {
-            Toggle(isOn: $isActive) {
-                Text("Enable Filter")
-            }
-            Section("Select Date Range") {
-                DatePicker("Start", selection: $startDate, displayedComponents: [.date])
-
-                DatePicker("End", selection: $endDate, displayedComponents: [.date])
-
-                Button("Add Date Range") {
-                    withAnimation {
-                        let range = startDate..<endDate
-                        filters.append(.init(range: range))
-                        isActive = true
-                        startDate = .now
-                        endDate = .now
-                    }
-                }
-            }
-
-            Section {
-                if filters.isEmpty {
-                    Text("No date ranges - Create one to filter launches.")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(filters) { filter in
-                        HStack {
-                            Text(filter.range.lowerBound.formatted(date: .numeric, time: .omitted))
-                            Text(" - ")
-                                .foregroundStyle(.secondary)
-                            Text(filter.range.upperBound.formatted(date: .numeric, time: .omitted))
-                        }
-                    }
-                    .onDelete { index in
-                        filters.remove(atOffsets: index)
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Date Ranges")
-                    Spacer()
-                    Button("Clear all") {
-                        withAnimation {
-                            filters.removeAll()
-                        }
-                    }
-                    .textCase(nil)
-                    .font(.callout)
-                }
-            }
-        }
-    }
-
-    struct Filter: Hashable, Equatable, Identifiable {
-        let id = UUID()
-
-        let range: Range<Date>
     }
 }
 
 #Preview {
-
-    @Previewable
-    @State
-    var filters: [DateRangeToolbar.Filter] = []
 
     @Previewable
     @State
@@ -117,7 +55,10 @@ struct DateRangeToolbar: ToolbarContent {
     NavigationStack {
         Text("Hello, World!")
             .toolbar {
-                DateRangeToolbar(isActive: $isActive, filters: $filters) {}
+                DateRangeToolbar(
+                    isFilterActive: isActive,
+                    showDateRangeFilter: .constant(false)
+                ) {}
             }
     }
 }
