@@ -6,14 +6,16 @@
 //
 
 /// A type provides a way to store and retrieve filters for date ranges.
-public protocol FilterProviding: Sendable, Actor {
+@MainActor
+public protocol FilterProviding: Sendable, AnyObject {
     /// The filters currently in use
     var filters: [DateRangeFilter] { get set }
     /// Whether or not the filters are active
     var isActive: Bool { get set }
 }
 
-public actor FilterProvider: FilterProviding {
+@MainActor
+public final class FilterProvider: FilterProviding {
     private let store: KeyStore
 
     private let filterKey: KeyStore.Key = "dateRangeFilter"
