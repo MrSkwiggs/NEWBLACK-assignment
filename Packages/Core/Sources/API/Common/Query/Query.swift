@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 /// A query to apply to outgoing requests.
 public struct Query<Item: DTO>: Sendable, Encodable {

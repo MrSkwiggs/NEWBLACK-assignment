@@ -13,16 +13,27 @@ public final class FeatureFactory: SharedContainer {
 
     /// A filter provider that provides filters for the application.
     public var filterProvider: Factory<FilterProviding> {
-        self { @MainActor in FilterProvider(store: DomainFactory.shared.userPreferenceStorage()) }
+        self {
+            @MainActor in FilterProvider(
+                store: DomainFactory.shared.userPreferenceStorage()
+            )
+        }
+        .singleton
     }
 
     /// A Launch provider that provides launch information.
     public var launchProvider: Factory<LaunchProviding> {
-        self { @MainActor in LaunchProvider() }
+        self {
+            @MainActor in LaunchProvider()
+        }
+        .singleton
     }
 
     /// A Rocket provider that provides rocket information.
     public var rocketProvider: Factory<RocketProviding> {
-        self { @MainActor in RocketProvider() }
+        self {
+            @MainActor in RocketProvider()
+        }
+        .singleton
     }
 }

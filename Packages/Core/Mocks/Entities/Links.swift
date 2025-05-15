@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import API
+import Entities
 
 public extension Links {
     static let munaholic = Links(

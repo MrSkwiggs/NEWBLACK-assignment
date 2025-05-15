@@ -14,11 +14,17 @@ public final class DomainFactory: SharedContainer {
 
     /// A date provider that provides the current date.
     public var dateProvider: Factory<DateProvider> {
-        self { .main }
+        self {
+            .main
+        }
+        .singleton
     }
 
     /// A key store that stores user preferences.
     public var userPreferenceStorage: Factory<KeyStore> {
-        self { .userDefaults(suitePrefix: "dev.skwiggs.newblack-x") }
+        self {
+            .userDefaults(suitePrefix: "dev.skwiggs.newblack-x")
+        }
+        .singleton
     }
 }

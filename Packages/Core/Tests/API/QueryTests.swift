@@ -7,6 +7,7 @@
 
 import Foundation
 import Testing
+import Entities
 @testable import API
 
 @Suite("Query Tests")

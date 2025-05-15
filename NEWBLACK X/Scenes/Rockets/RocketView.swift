@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import API
+import Entities
 
 struct RocketView: View {
 

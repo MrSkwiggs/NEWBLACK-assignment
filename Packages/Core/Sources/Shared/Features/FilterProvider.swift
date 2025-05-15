@@ -5,6 +5,8 @@
 //  Created by Dorian on 15/05/2025.
 //
 
+import Entities
+
 /// A type provides a way to store and retrieve filters for date ranges.
 @MainActor
 public protocol FilterProviding: Sendable, AnyObject {

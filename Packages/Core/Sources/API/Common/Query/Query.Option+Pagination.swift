@@ -5,6 +5,8 @@
 //  Created by Dorian on 14/05/2025.
 //
 
+import Entities
+
 public extension Query.Option {
     /// Pagination configuration for paginated requests.
     struct Pagination: Sendable, Equatable, Hashable {

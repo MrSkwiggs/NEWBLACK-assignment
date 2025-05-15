@@ -6,6 +6,7 @@
 //
 
 import Networking
+import Entities
 
 public extension Rockets {
     /// Rocket Query endpoint.

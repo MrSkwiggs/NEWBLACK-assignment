@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import Entities
 
-struct DateRangeFilter: View {
+struct DateRangeFilterView: View {
 
     @Binding
     var isActive: Bool
 
     @Binding
-    var filters: [Filter]
+    var filters: [DateRangeFilter]
 
     @State
     private var startDate: Date = .now
@@ -47,7 +48,7 @@ struct DateRangeFilter: View {
 
                 Button("Add Date Range") {
                     withAnimation {
-                        let range = startDate..<endDate
+                        let range = startDate...endDate
                         filters.append(.init(range: range))
                         isActive = true
                         startDate = .now
@@ -90,12 +91,6 @@ struct DateRangeFilter: View {
             }
         }
     }
-
-    struct Filter: Hashable, Equatable, Identifiable {
-        let id = UUID()
-
-        let range: Range<Date>
-    }
 }
 
 #Preview {
@@ -106,7 +101,7 @@ struct DateRangeFilter: View {
 
     @Previewable
     @State
-    var filters: [DateRangeFilter.Filter] = []
+    var filters: [DateRangeFilter] = []
 
-    DateRangeFilter(isActive: $isActive, filters: $filters)
+    DateRangeFilterView(isActive: $isActive, filters: $filters)
 }

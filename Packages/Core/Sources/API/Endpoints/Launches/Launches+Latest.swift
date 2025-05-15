@@ -7,6 +7,7 @@
 
 import Foundation
 import Networking
+import Entities
 
 public extension Launches {
     /// Latest Launch endpoint.

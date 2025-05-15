@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import API
+import Entities
 
 nonisolated(unsafe) private let isoFormatter = ISO8601DateFormatter()
 

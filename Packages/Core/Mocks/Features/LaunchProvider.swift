@@ -5,7 +5,7 @@
 //  Created by Dorian on 15/05/2025.
 //
 
-import API
+import Entities
 import Shared
 import Foundation
 
@@ -57,27 +57,44 @@ public actor MockLaunchProvider: LaunchProviding {
 }
 
 public extension MockLaunchProvider {
-
-    /// A mock delay to simulate network latency.
-    static var mockDuration: MockDuration = .short
-
     /// A mock provider that returns an empty list of launches.
-    static let empty: MockLaunchProvider = .init(pages: [], duration: mockDuration)
+    static func empty(
+        mockDuration: MockDuration = .short,
+        _ hookLaunches: @escaping LaunchesHook = { _, _, response in response }
+    ) -> Self {
+        .init(
+            pages: [],
+            duration: mockDuration,
+            hookLaunches: hookLaunches
+        )
+    }
 
     /// A mock provider that returns a list of launches.
-    static let success: MockLaunchProvider = .init(
-        pages: [
-            .success(.init(items: [.krakenUnleashed, .minmusMambo], page: 1, pageSize: 2, nextPage: 2)),
-            .success(.init(items: [.munaholicAchievement, .seaOfKerbalDebut], page: 2, pageSize: 2, nextPage: nil))
-        ],
-        duration: mockDuration
-    )
+    static func success(
+        mockDuration: MockDuration = .short,
+        hookLaunches: @escaping LaunchesHook = { _, _, response in response }
+    ) -> Self {
+        .init(
+            pages: [
+                .success(.init(items: [.krakenUnleashed, .minmusMambo], page: 1, pageSize: 2, nextPage: 2)),
+                .success(.init(items: [.munaholicAchievement, .seaOfKerbalDebut], page: 2, pageSize: 2, nextPage: nil))
+            ],
+            duration: mockDuration,
+            hookLaunches: hookLaunches
+        )
+    }
 
     /// A mock provider that returns a failure.
-    static let failure: MockLaunchProvider = .init(
-        pages: [
-            .failure(MockError()),
-        ],
-        duration: mockDuration
-    )
+    static func failure(
+        mockDuration: MockDuration = .short,
+        hookLaunches: @escaping LaunchesHook = { _, _, response in response
+        }) -> Self {
+        .init(
+            pages: [
+                .failure(MockError()),
+            ],
+            duration: mockDuration,
+            hookLaunches: hookLaunches
+        )
+    }
 }

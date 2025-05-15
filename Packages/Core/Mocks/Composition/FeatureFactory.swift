@@ -16,11 +16,11 @@ public extension FeatureFactory {
         }
 
         shared.launchProvider.register { @MainActor in
-            MockLaunchProvider.success
+            MockLaunchProvider.success()
         }
 
         shared.rocketProvider.register { @MainActor in
-            MockRocketProvider.success
+            MockRocketProvider.success()
         }
     }
 }

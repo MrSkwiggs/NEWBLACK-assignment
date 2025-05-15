@@ -1,5 +1,5 @@
 {
-  "originHash" : "234bd594cd64241f0b1262b7bc90f01a55459d74dc8f751076d6cd68950cc5e9",
+  "originHash" : "270c8a2fbffb652211cb38b0c6f124daf48b0c0ac9b5c1e9ed8ee935435bc513",
   "pins" : [
     {
       "identity" : "factory",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "22157b88670bbeac591895c0fc8b8f7f340cf757",
         "version" : "2.5.0"
+      }
+    },
+    {
+      "identity" : "swift-testing-expectation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/dfed/swift-testing-expectation",
+      "state" : {
+        "revision" : "9ed218a5099dd87838a4c79ddc9ad9d4e040a38e",
+        "version" : "0.1.3"
       }
     }
   ],

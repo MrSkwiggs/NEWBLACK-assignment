@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct HomeView: View {
+
+    @EnvironmentObject
+    var viewModelFactory: ViewModelFactory
+
     var body: some View {
         TabView {
             Tab("Launches", systemImage: "airplane.departure") {
                 NavigationStack {
-                    LaunchesView()
+                    LaunchesView(
+                        model: viewModelFactory.launchesViewModel()
+                    )
                 }
             }
             Tab("Rockets", systemImage: "airplane") {
                 NavigationStack {
-                    RocketsView()
+                    RocketsView(model: viewModelFactory.rocketsViewModel())
                 }
             }
         }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 /// A Keystore offers a key-based value persistence source of data.
 open class KeyStore: @unchecked Sendable {

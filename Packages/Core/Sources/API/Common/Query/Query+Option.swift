@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 public extension Query {
     enum Option: Sendable {

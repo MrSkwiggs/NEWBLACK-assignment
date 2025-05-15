@@ -7,6 +7,7 @@
 
 import Foundation
 import API
+import Entities
 
 /// A type that can provide rockets
 public protocol RocketProviding: Sendable, Actor {

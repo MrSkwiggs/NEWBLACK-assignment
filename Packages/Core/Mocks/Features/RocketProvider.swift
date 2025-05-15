@@ -5,7 +5,7 @@
 //  Created by Dorian on 15/05/2025.
 //
 
-import API
+import Entities
 import Shared
 import Foundation
 
@@ -79,26 +79,50 @@ public actor MockRocketProvider: RocketProviding {
 
 public extension MockRocketProvider {
 
-    /// A mock delay to simulate network latency.
-    static var mockDuration: MockDuration = .short
+    /// A mock provider that returns an empty list of launches.
+    static func empty(
+        mockDuration: MockDuration = .short,
+        hookRockets: @escaping RocketsHook = { _, response in response },
+        hookRocket: @escaping RocketHook = { _, response in response }
+    ) -> Self {
+        .init(
+            pages: [],
+            duration: mockDuration,
+            hookRockets: hookRockets,
+            hookRocket: hookRocket
+        )
+    }
 
-    /// A mock provider that returns an empty list of Rocketes.
-    static let empty: MockRocketProvider = .init(pages: [], duration: mockDuration)
-
-    /// A mock provider that returns a list of Rocketes.
-    static let success: MockRocketProvider = .init(
-        pages: [
-            .success(.init(items: [.kraken, .falcon9], page: 1, pageSize: 2, nextPage: 2)),
-            .success(.init(items: [.starship], page: 2, pageSize: 2, nextPage: nil))
-        ],
-        duration: mockDuration
-    )
+    /// A mock provider that returns a list of launches.
+    static func success(
+        mockDuration: MockDuration = .short,
+        hookRockets: @escaping RocketsHook = { _, response in response },
+        hookRocket: @escaping RocketHook = { _, response in response }
+    ) -> Self {
+        .init(
+            pages: [
+                .success(.init(items: [.falcon9, .kraken], page: 1, pageSize: 2, nextPage: 2)),
+                .success(.init(items: [.starship], page: 2, pageSize: 2, nextPage: nil))
+            ],
+            duration: mockDuration,
+            hookRockets: hookRockets,
+            hookRocket: hookRocket
+        )
+    }
 
     /// A mock provider that returns a failure.
-    static let failure: MockRocketProvider = .init(
-        pages: [
-            .failure(MockError()),
-        ],
-        duration: mockDuration
-    )
+    static func failure(
+        mockDuration: MockDuration = .short,
+        hookRockets: @escaping RocketsHook = { _, response in response },
+        hookRocket: @escaping RocketHook = { _, response in response }
+    ) -> Self {
+        .init(
+            pages: [
+                .failure(MockError()),
+            ],
+            duration: mockDuration,
+            hookRockets: hookRockets,
+            hookRocket: hookRocket
+        )
+    }
 }
