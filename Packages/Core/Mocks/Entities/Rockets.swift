@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import API
+import Entities
 
 public extension Rocket {
     static let kraken: Rocket = .init(

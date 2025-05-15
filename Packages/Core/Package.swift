@@ -23,8 +23,13 @@ let package = Package(
     ],
     targets: [
         .target(
+            name: "Entities",
+            path: "Sources/Entities"
+        ),
+        .target(
             name: "Shared",
             dependencies: [
+                "Entities",
                 "API",
                 "Factory"
             ],
@@ -33,6 +38,7 @@ let package = Package(
         .target(
             name: "API",
             dependencies: [
+                "Entities",
                 "Networking"
             ],
             path: "Sources/API"

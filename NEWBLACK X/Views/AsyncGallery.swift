@@ -77,7 +77,7 @@ struct AsyncGallery<Content: View>: View {
 }
 
 import Mocks
-import API
+import Entities
 
 #Preview("With Image") {
     StickyHeaderList {

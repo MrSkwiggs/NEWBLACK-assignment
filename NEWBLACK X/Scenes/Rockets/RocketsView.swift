@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData
-import API
+import Entities
 
 struct RocketsView: View {
 

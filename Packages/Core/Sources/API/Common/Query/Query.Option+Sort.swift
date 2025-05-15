@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 public extension Query.Option {
     /// Sorting configuration for the query.

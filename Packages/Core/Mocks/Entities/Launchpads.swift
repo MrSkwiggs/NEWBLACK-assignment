@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import API
+import Entities
 
 extension Launchpad {
     public static let alpha = Launchpad(

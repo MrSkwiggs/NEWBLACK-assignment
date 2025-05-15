@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Entities
 
 public extension Query {
     /// A filter to apply to a query.

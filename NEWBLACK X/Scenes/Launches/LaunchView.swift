@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import API
+import Entities
 
 struct LaunchView: View {
 
@@ -191,6 +191,5 @@ extension LaunchView {
 }
 
 #Preview {
-
     LaunchView(launch: .minmusMambo)
 }

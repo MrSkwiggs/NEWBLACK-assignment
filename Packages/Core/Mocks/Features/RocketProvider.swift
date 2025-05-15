@@ -5,7 +5,7 @@
 //  Created by Dorian on 15/05/2025.
 //
 
-import API
+import Entities
 import Shared
 import Foundation
 

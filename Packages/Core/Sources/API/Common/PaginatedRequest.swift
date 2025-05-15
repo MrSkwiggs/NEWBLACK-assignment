@@ -7,6 +7,7 @@
 
 import Foundation
 import Networking
+import Entities
 
 /// A request that uses and returns a paginated response.
 protocol PaginatedRequest: Request, BodyProvider, Sendable where Response == Paginated<Item>, ProvidedBody == Query<Item> {
