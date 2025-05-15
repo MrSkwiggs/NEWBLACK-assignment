@@ -26,6 +26,9 @@ struct LaunchesView: View {
     @State
     var showDateRangeFilter: Bool = false
 
+    @State
+    var showSkeleton: Bool = false
+
     var body: some View {
         List {
             ForEach(launches) { launch in
@@ -61,7 +64,6 @@ struct LaunchesView: View {
                     } actions: {
                         Button("Clear Filters") {
                             withAnimation {
-                                dateRanges.removeAll()
                                 filterDateRanges = false
                             }
 
@@ -74,6 +76,7 @@ struct LaunchesView: View {
                 }
             }
         }
+        .redacted(reason: showSkeleton ? [.placeholder] : [])
         .toolbar {
             DateRangeToolbar(
                 isFilterActive: filterDateRanges,
@@ -104,6 +107,8 @@ struct LaunchesView: View {
     }
 
     private func refresh() async {
+        showSkeleton = true
+        defer { showSkeleton = false }
         self.launches = await fetchPage(0)
     }
 
