@@ -8,50 +8,39 @@
 import SwiftUI
 import SwiftData
 import Entities
+import Factory
 
 struct LaunchesView: View {
 
-    @State
-    var launches: [Launch] = []
+    @EnvironmentObject
+    var viewModelFactory: ViewModelFactory
 
     @State
-    var page: Int? = 0
-
-    @State
-    var dateRanges: [DateRangeFilter.Filter] = []
-
-    @State
-    var filterDateRanges: Bool = false
-
-    @State
-    var showDateRangeFilter: Bool = false
-
-    @State
-    var showSkeleton: Bool = false
+    var model: Model
 
     var body: some View {
         List {
-            ForEach(launches) { launch in
+            ForEach(model.launches) { launch in
                 NavigationLink {
-                    LaunchView(launch: launch)
+                    LaunchView(model: viewModelFactory.launchViewModel(for: launch))
                 } label: {
                     Row(launch: launch)
                 }
             }
-            if page != nil {
+            if model.hasNextPage {
                 Section {
                     HStack {
                         Spacer()
                         ProgressView()
                             .progressViewStyle(.circular)
                             .task {
-                                await fetchNextPage()
+                                model.pageLoaderDidAppear()
                             }
                         Spacer()
                     }
                 }
             } else {
-                if launches.isEmpty {
+                if model.launches.isEmpty {
                     ContentUnavailableView {
                         Label {
                             Text("Nothing to see here")
@@ -64,11 +53,7 @@ struct LaunchesView: View {
                     } actions: {
                         Button("Clear Filters") {
                             withAnimation {
-                                filterDateRanges = false
-                            }
-
-                            Task {
-                                await refresh()
+                                model.userDidPressClearFilters()
                             }
                         }
                     }
@@ -76,71 +61,41 @@ struct LaunchesView: View {
                 }
             }
         }
-        .redacted(reason: showSkeleton ? [.placeholder] : [])
+        .redacted(reason: model.showSkeleton ? [.placeholder] : [])
         .toolbar {
             DateRangeToolbar(
-                isFilterActive: filterDateRanges,
-                showDateRangeFilter: $showDateRangeFilter
+                isFilterActive: model.isFilterActive,
+                showDateRangeFilter: $model.showDateRangeFilter
             ) {
-                filterDateRanges = false
-                Task {
-                    await refresh()
-                }
+                model.userDidPressClearFilters()
             }
         }
         .refreshable {
-            await refresh()
+            await model.refresh()
         }
-        .popover(isPresented: $showDateRangeFilter) {
-            DateRangeFilter(
-                isActive: $filterDateRanges,
-                filters: $dateRanges
+        .popover(isPresented: $model.showDateRangeFilter) {
+            DateRangeFilterView(
+                isActive: $model.isFilterActive,
+                filters: $model.filters
             )
             .presentationDetents([.medium, .large])
             .onDisappear {
-                Task {
-                    await refresh()
-                }
+                model.userDidUpdateFilters()
             }
         }
-        .animation(.default, value: filterDateRanges)
-    }
-
-    private func refresh() async {
-        showSkeleton = true
-        defer { showSkeleton = false }
-        self.launches = await fetchPage(0)
-    }
-
-    private func fetchNextPage() async {
-        guard let page else { return }
-        self.launches.append(contentsOf: await fetchPage(page))
-    }
-
-    private func fetchPage(_ page: Int) async -> [Launch] {
-        do {
-            let ranges: Launch.Filter = .or(dateRanges.map {
-                .range(field: .date, range: $0.range)
-            })
-            let response = try await API.Launches
-                .query(
-                    filter: filterDateRanges ? ranges : .empty,
-                    populate: [.launchpad],
-                    sort: [.by(.isUpcoming, .reverse), .by(.date, .reverse)],
-                    page: page,
-                    pageSize: 10
-                )
-            self.page = response.nextPage
-            return response.items
-        } catch {
-            print("Error fetching next page of launches: \(error)")
-            return []
-        }
+        .animation(.default, value: model.isFilterActive)
     }
 }
 
 import Mocks
-
 #Preview {
-    LaunchesView()
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.success, filterProvider: MockFilterProvider.empty))
+}
+
+#Preview("Empty") {
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty, filterProvider: MockFilterProvider.empty))
+}
+
+#Preview("Error") {
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure, filterProvider: MockFilterProvider.empty))
 }
