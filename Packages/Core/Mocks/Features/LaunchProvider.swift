@@ -59,7 +59,7 @@ public actor MockLaunchProvider: LaunchProviding {
 public extension MockLaunchProvider {
     /// A mock provider that returns an empty list of launches.
     static func empty(
-        delay mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .short,
         _ hookLaunches: @escaping LaunchesHook = { _, _, response in response }
     ) -> Self {
         .init(
@@ -71,7 +71,7 @@ public extension MockLaunchProvider {
 
     /// A mock provider that returns a list of launches.
     static func success(
-        delay mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .short,
         hookLaunches: @escaping LaunchesHook = { _, _, response in response }
     ) -> Self {
         .init(
@@ -86,7 +86,7 @@ public extension MockLaunchProvider {
 
     /// A mock provider that returns a failure.
     static func failure(
-        delay mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .short,
         hookLaunches: @escaping LaunchesHook = { _, _, response in response
         }) -> Self {
         .init(

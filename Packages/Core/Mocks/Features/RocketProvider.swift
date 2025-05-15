@@ -79,11 +79,9 @@ public actor MockRocketProvider: RocketProviding {
 
 public extension MockRocketProvider {
 
-    /// A mock delay to simulate network latency.
-    static var mockDuration: MockDuration = .short
-
     /// A mock provider that returns an empty list of launches.
     static func empty(
+        mockDuration: MockDuration = .short,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {
@@ -97,6 +95,7 @@ public extension MockRocketProvider {
 
     /// A mock provider that returns a list of launches.
     static func success(
+        mockDuration: MockDuration = .short,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {
@@ -113,6 +112,7 @@ public extension MockRocketProvider {
 
     /// A mock provider that returns a failure.
     static func failure(
+        mockDuration: MockDuration = .short,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {
