@@ -43,7 +43,7 @@ let package = Package(
 
         .testTarget(
             name: "SharedTests",
-            dependencies: ["Shared"],
+            dependencies: ["Shared", "Mocks"],
             path: "Tests/Shared"
         ),
         .testTarget(

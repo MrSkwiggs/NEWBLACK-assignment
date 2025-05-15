@@ -24,4 +24,16 @@ public struct Paginated<Item: Sendable & Decodable>: Sendable, Decodable {
         case pageSize = "limit"
         case nextPage = "nextPage"
     }
+
+    package init(items: [Item], page: Int, pageSize: Int, nextPage: Int?) {
+        self.items = items
+        self.page = page
+        self.pageSize = pageSize
+        self.nextPage = nextPage
+    }
+
+    /// An empty paginated response.
+    package static func empty() -> Self {
+        .init(items: [], page: 0, pageSize: 0, nextPage: nil)
+    }
 }

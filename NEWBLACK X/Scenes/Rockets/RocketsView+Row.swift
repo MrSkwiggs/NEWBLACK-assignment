@@ -52,7 +52,7 @@ extension RocketsView {
         }
 
         private var successRateColor: Color {
-            [Color.red, .orange, .green]
+            Gradient.redToGreen
                 .interpolateColor(at: rocket.successRate) ?? .secondary
         }
     }
