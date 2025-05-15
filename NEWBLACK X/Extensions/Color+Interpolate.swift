@@ -34,6 +34,15 @@ extension Array where Element == Color {
     }
 }
 
+extension Gradient {
+    static let redToGreen = Gradient(colors: [Color.red, .yellow, .green])
+
+    func interpolateColor(at point: CGFloat) -> Color? {
+        let colors = self.stops.map(\.color)
+        return colors.interpolateColor(at: point)
+    }
+}
+
 #Preview {
 
     @Previewable
@@ -55,6 +64,7 @@ extension Array where Element == Color {
                     LinearGradient(colors: colors, startPoint: .leading, endPoint: .trailing)
                 }
                 .listRowInsets(.init())
+                .tint(.white)
         }
     }
 }
