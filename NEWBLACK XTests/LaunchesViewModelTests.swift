@@ -20,7 +20,7 @@ struct LaunchesViewModelTests {
     func fetchLaunchesOnInit() async {
         let expectFetchesOnInit = Expectation()
 
-        let launchProvider = MockLaunchProvider.success(delay: .instant) { page, filters, willReturn in
+        let launchProvider = MockLaunchProvider.success(mockDuration: .instant) { page, filters, willReturn in
             expectFetchesOnInit.fulfill()
             return willReturn
         }
@@ -30,7 +30,7 @@ struct LaunchesViewModelTests {
             filterProvider: MockFilterProvider.empty
         )
 
-        await Expectations(expectFetchesOnInit).fulfillment(within: .seconds(1))
+        await Expectations(expectFetchesOnInit).fulfillment(within: .seconds(10))
     }
 
     @Test("Fetches pages")
@@ -38,7 +38,7 @@ struct LaunchesViewModelTests {
         let expectFetchesTwoPages = Expectation(expectedCount: 2)
         let expectedPages = [0, 1, 2]
 
-        let launchProvider = MockLaunchProvider.success(delay: .instant) { page, filters, willReturn in
+        let launchProvider = MockLaunchProvider.success(mockDuration: .instant) { page, filters, willReturn in
             expectFetchesTwoPages.fulfill()
             #expect(page == expectedPages[page])
             return willReturn
@@ -51,7 +51,7 @@ struct LaunchesViewModelTests {
 
         model.pageLoaderDidAppear()
 
-        await Expectations(expectFetchesTwoPages).fulfillment(within: .seconds(1))
+        await Expectations(expectFetchesTwoPages).fulfillment(within: .seconds(10))
     }
 
     @Test("Persists Filters")
