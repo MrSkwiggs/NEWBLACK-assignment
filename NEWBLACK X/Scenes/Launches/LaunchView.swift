@@ -10,17 +10,12 @@ import Entities
 
 struct LaunchView: View {
 
-    let launch: Launch
-
     @State
-    private var rocket: Rocket?
-
-    @State
-    private var sheetContent: SheetPresentationContent?
+    var model: Model
 
     var body: some View {
         StickyHeaderList {
-            AsyncGallery(images: launch.links.images) {
+            AsyncGallery(images: model.launch.links.images) {
                 HStack {
                     Text("Status:")
                         .foregroundStyle(.white.opacity(0.5))
@@ -36,19 +31,19 @@ struct LaunchView: View {
                 }
             }
         } content: {
-            Text(launch.details ?? "No details available")
+            Text(model.launch.details ?? "No details available")
 
             Section("Details") {
                 LabeledContent {
-                    Text(launch.date.formatted(date: .long, time: .shortened))
+                    Text(model.launch.date.formatted(date: .long, time: .shortened))
                 } label: {
                     Text("Date")
                 }
 
                 LabeledContent {
-                    if let rocket {
+                    if let rocket = model.rocket {
                         Button {
-                            sheetContent = .rocket(rocket)
+                            model.userDidTapRocket(rocket)
                         } label: {
                             Text(rocket.name)
                         }
@@ -56,11 +51,7 @@ struct LaunchView: View {
                         ProgressView()
                             .progressViewStyle(.circular)
                             .task {
-                                do {
-                                    rocket = try await API.Rockets.fetch(byID: launch.rocketID)
-                                } catch {
-                                    print("Failed to fetch rocket: \(error)")
-                                }
+                                model.viewDidAppear()
                             }
                     }
                 } label: {
@@ -69,9 +60,9 @@ struct LaunchView: View {
 
                 LabeledContent {
                     Button {
-                        sheetContent = .launchpad(launch.launchpad)
+                        model.userDidTapLaunchpad(model.launch.launchpad)
                     } label: {
-                        Text(launch.launchpad.name)
+                        Text(model.launch.launchpad.name)
                     }
                 } label: {
                     Text("Launchpad")
@@ -79,12 +70,12 @@ struct LaunchView: View {
             }
 
             Section("Links") {
-                if launch.links.hasLinks == false {
+                if model.launch.links.hasLinks == false {
                     Text("No links available")
                         .foregroundStyle(.secondary)
                 }
 
-                if let url = launch.links.webcast {
+                if let url = model.launch.links.webcast {
                     Link(destination: url) {
                         HStack {
                             Image(systemName: "play.rectangle")
@@ -93,9 +84,9 @@ struct LaunchView: View {
                     }
                 }
 
-                if let url = launch.links.wikipedia {
+                if let url = model.launch.links.wikipedia {
                     Button {
-                        sheetContent = .link(url)
+                        model.userWantsToReadMore(at: url)
                     } label: {
                         HStack {
                             Image(systemName: "book")
@@ -105,7 +96,7 @@ struct LaunchView: View {
                 }
             }
         }
-        .sheet(item: $sheetContent) { item in
+        .sheet(item: $model.sheetContent) { item in
             Group {
                 switch item {
                 case let .rocket(rocket):
@@ -121,28 +112,28 @@ struct LaunchView: View {
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
-        .navigationTitle(launch.name)
+        .navigationTitle(model.launch.name)
     }
 
     var launchStatusLabel: String {
-        if launch.isUpcoming {
+        if model.launch.isUpcoming {
             "Upcoming"
         } else {
-            launch.isSuccess == true ? "Success" : "Failure"
+            model.launch.isSuccess == true ? "Success" : "Failure"
         }
     }
 
     var launchStatusColor: Color {
-        if launch.isUpcoming {
+        if model.launch.isUpcoming {
             return .yellow
         } else {
-            return launch.isSuccess == true ? .green : .red
+            return model.launch.isSuccess == true ? .green : .red
         }
     }
 
     @ViewBuilder
     var description: some View {
-        if let failures = launch.failures, !failures.isEmpty {
+        if let failures = model.launch.failures, !failures.isEmpty {
             ForEach(failures, id: \.hashValue) { failure in
                 VStack(alignment: .leading) {
                     Text("Failure at \(failure.time) seconds")
@@ -157,7 +148,7 @@ struct LaunchView: View {
                 .padding()
             }
         } else {
-            if let details = launch.details {
+            if let details = model.launch.details {
                 Text(details)
                     .foregroundStyle(.secondary)
                     .padding()
@@ -170,8 +161,8 @@ struct LaunchView: View {
     }
 }
 
-extension LaunchView {
-    enum SheetPresentationContent: Identifiable {
+extension LaunchView.Model {
+    enum SheetContent: Identifiable {
         case rocket(Rocket)
         case launchpad(Launchpad)
         case link(URL)
@@ -191,5 +182,5 @@ extension LaunchView {
 }
 
 #Preview {
-    LaunchView(launch: .minmusMambo)
+//    LaunchView(launch: .minmusMambo)
 }
