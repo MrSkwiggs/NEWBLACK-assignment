@@ -4,18 +4,18 @@ on: pull_request
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15
     name: Build and Test
 
     steps:
     - name: Checkout Project
       uses: actions/checkout@v4
 
-    # - name: Set up Xcode
-    #   run: sudo xcode-select -switch /Applications/Xcode_16.2.app
+    - name: Set up Xcode
+      run: sudo xcode-select -switch /Applications/Xcode_16.3.app
 
-    - name: Set up Swift
-      uses: swift-actions/setup-swift@v2
+    # - name: Set up Swift
+    #   uses: swift-actions/setup-swift@v2
 
     - name: Build and test
       run: |
