@@ -14,8 +14,8 @@ extension LaunchesView {
     @Observable
     final class Model {
 
-        let launchProvider: LaunchProviding
-        let filterProvider: FilterProviding
+        private let launchProvider: LaunchProviding
+        private let filterProvider: FilterProviding
 
         init(
             launchProvider: LaunchProviding,
@@ -27,6 +27,7 @@ extension LaunchesView {
             self.filters = filterProvider.filters
             self.isFilterActive = filterProvider.isActive
 
+            filtersSinceLastFetch = (isActive: filterProvider.isActive, filters: filterProvider.filters)
             refreshTask = Task {
                 await refresh()
             }
@@ -34,11 +35,14 @@ extension LaunchesView {
 
         var launches: [Launch] = []
 
+        private var filtersSinceLastFetch: (isActive: Bool, filters: [DateRangeFilter])
+
         var filters: [DateRangeFilter] {
             didSet {
                 filterProvider.filters = filters
             }
         }
+
         var isFilterActive: Bool {
             didSet {
                 filterProvider.isActive = isFilterActive
@@ -78,6 +82,10 @@ extension LaunchesView {
         }
 
         func userDidUpdateFilters() {
+            guard isFilterActive != filtersSinceLastFetch.isActive || filters != filtersSinceLastFetch.filters else {
+                return
+            }
+            filtersSinceLastFetch = (isActive: isFilterActive, filters: filters)
             refreshTask = Task {
                 await refresh()
             }
