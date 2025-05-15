@@ -9,6 +9,7 @@ import Foundation
 import Shared
 
 public extension FeatureFactory {
+    /// Configures the factory to use mock implementations.
     static func useMocks() {
         shared.filterProvider.register { @MainActor in
             MockFilterProvider.two
