@@ -47,5 +47,5 @@ struct RocketsView: View {
 import Mocks
 
 #Preview {
-    RocketsView(model: .init(rocketProvider: MockRocketProvider.success))
+    RocketsView(model: .init(rocketProvider: MockRocketProvider.success()))
 }

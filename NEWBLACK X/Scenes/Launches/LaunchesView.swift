@@ -89,13 +89,13 @@ struct LaunchesView: View {
 
 import Mocks
 #Preview {
-    LaunchesView(model: .init(launchProvider: MockLaunchProvider.success, filterProvider: MockFilterProvider.empty))
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.success(), filterProvider: MockFilterProvider.empty))
 }
 
 #Preview("Empty") {
-    LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty, filterProvider: MockFilterProvider.empty))
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty(), filterProvider: MockFilterProvider.empty))
 }
 
 #Preview("Error") {
-    LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure, filterProvider: MockFilterProvider.empty))
+    LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure(), filterProvider: MockFilterProvider.empty))
 }
