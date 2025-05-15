@@ -14,9 +14,6 @@ jobs:
     - name: Set up Xcode
       run: sudo xcode-select -switch /Applications/Xcode_16.3.app
 
-    # - name: Set up Swift
-    #   uses: swift-actions/setup-swift@v2
-
     - name: Build and test
       run: |
         xcodebuild \
