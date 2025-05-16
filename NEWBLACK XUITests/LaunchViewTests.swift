@@ -11,9 +11,10 @@ final class LaunchViewTests: BaseTestCase {
 
     func testLoadsRockets() {
         let launchPage = navigateToHomePage(loadingDuration: 1).launches.navigateToLaunch()
-
+        screenshot(name: "LaunchView - Loading Rocket")
         XCTAssertTrue(launchPage.rocketPlaceholder.waitForNonExistence(timeout: 2), "Rocket Placeholder should disappear after initial load")
         XCTAssertTrue(launchPage.rocket.waitForExistence(timeout: 2), "Rocket should exist after initial load")
+        screenshot(name: "LaunchView - Rocket Loaded")
     }
 
     func testRocketSheet() {
@@ -23,13 +24,15 @@ final class LaunchViewTests: BaseTestCase {
         launchPage.rocket.tap()
 
         XCTAssertTrue(launchPage.rocketSheet.waitForExistence(timeout: 2), "Rocket Sheet should exist after tapping on Rocket")
+        screenshot(name: "LaunchView - Rocket Sheet")
     }
 
     func testLaunchpadSheet() {
         let launchPage = navigateToHomePage(loadingDuration: 0).launches.navigateToLaunch()
-        
+
         XCTAssertTrue(launchPage.launchpadSheet.waitForNonExistence(timeout: 2), "Launchpad Sheet should not exist before tapping on Launchpad")
         launchPage.launchpad.tap()
         XCTAssertTrue(launchPage.launchpadSheet.waitForExistence(timeout: 2), "Launchpad Sheet should exist after tapping on Launchpad")
+        screenshot(name: "LaunchView - Launchpad Sheet")
     }
 }

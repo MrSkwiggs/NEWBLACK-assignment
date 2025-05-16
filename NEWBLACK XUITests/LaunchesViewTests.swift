@@ -15,6 +15,8 @@ final class LaunchesViewTests: BaseTestCase {
             launches.pageLoader.waitForNonExistence(timeout: 1),
             "Page Loader should disappear during refresh"
         )
+        screenshot(name: "LaunchesView - Page Loading")
         XCTAssertTrue(launches.pageLoader.waitForExistence(timeout: 3), "Page Loader should exist after initial load")
+        screenshot(name: "LaunchesView - Page Loaded")
     }
 }
