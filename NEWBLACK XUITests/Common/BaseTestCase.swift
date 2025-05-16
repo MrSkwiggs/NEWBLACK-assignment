@@ -15,7 +15,7 @@ open class BaseTestCase: XCTestCase {
     private var app: XCUIApplication!
 
     open override class var runsForEachTargetApplicationUIConfiguration: Bool {
-        false
+        true
     }
 
     open override func setUp() async throws {
