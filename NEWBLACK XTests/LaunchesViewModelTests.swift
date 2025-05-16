@@ -49,7 +49,9 @@ struct LaunchesViewModelTests {
             filterProvider: MockFilterProvider.empty
         )
 
-        model.pageLoaderDidAppear()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            model.pageLoaderDidAppear()
+        }
 
         await Expectations(expectFetchesTwoPages).fulfillment(within: .seconds(10))
     }
