@@ -166,9 +166,9 @@ Packages/
 The app includes two main packages:
 
 - [Core Package](/Packages/Core): Contains data models and business logic
-    1. **[Entities](/Packages/Core/Sources/Entities/README.md)**: Defines the domain models representing SpaceX data, such as `Launch`, `Rocket`, and `Launchpad`.
-    2. **[API](/Packages/Core/Sources/API/README.md)**: Contains the endpoints and services for interacting with the SpaceX API, including request and response handling.
-    3. **[Shared](/Packages/Core/Sources/Shared/README.md)**: Provides shared utilities, protocols, and extensions used across the app and other packages.
+    1. **[Entities](/Packages/Core/Sources/Entities)**: Defines the domain models representing SpaceX data, such as `Launch`, `Rocket`, and `Launchpad`.
+    2. **[API](/Packages/Core/Sources/API)**: Contains the endpoints and services for interacting with the SpaceX API, including request and response handling.
+    3. **[Shared](/Packages/Core/Sources/Shared)**: Provides shared utilities, protocols, and extensions used across the app and other packages.
 - [Networking Package](/Packages/Networking/README.md): Handles API communication
 
 ### Networking Package
