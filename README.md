@@ -1,8 +1,18 @@
 # NEWBLACK X - Assignment
 
+<div align="center">
+  <img src="/NEWBLACK%20X/Assets.xcassets/AppIcon.appiconset/1024.png" width="250" alt="App Icon">
+</div>
+
 ## Overview
 
 NEWBLACK X is an iOS application that showcases SpaceX launches and rockets using a modern Swift architecture. The app demonstrates best practices in iOS development with SwiftUI, Swift Concurrency, and MVVM design patterns. It allows users to browse SpaceX launches and rockets, view detailed information, and apply filters.
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/052fc4bd-9b85-4e4a-bcd4-9f4651b24c5e" width="300" alt="Launches List">
+  <img src="https://github.com/user-attachments/assets/f07814dc-4707-46b0-8db4-f4410619bb92" width="300" alt="Rockets List">  
+</div>
+
 
 ## Author
 Dorian Grolaux
