@@ -193,6 +193,6 @@ For development with mocked data, run the Mocked scheme. Otherwise, running the 
 
 ## Technical Requirements
 
-- iOS 16.0+
-- Swift 5.9+
-- Xcode 15.0+
+- iOS 18.0
+- Swift 6.1
+- Xcode 16.3
