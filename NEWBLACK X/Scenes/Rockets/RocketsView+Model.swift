@@ -15,7 +15,15 @@ extension RocketsView {
     final class Model {
         private let rocketProvider: RocketProviding
 
-        var rockets: [Rocket] = []
+        init(rocketProvider: RocketProviding) {
+            self.rocketProvider = rocketProvider
+
+            refreshTask = Task {
+                await refresh()
+            }
+        }
+
+        var state: ModelState<Rocket> = .loaded(items: [])
 
         @ObservationIgnored
         private var page: Int? = 0
@@ -38,33 +46,26 @@ extension RocketsView {
             page != nil
         }
 
-        init(rocketProvider: RocketProviding) {
-            self.rocketProvider = rocketProvider
-            
-            refreshTask = Task {
-                await refresh()
-            }
-        }
-
         func refresh() async {
-            self.rockets = await fetchPage(0)
+            state.setLoading()
+            await fetchPage(0)
         }
 
         private func fetchNextPage() {
             pageTask = Task {
                 guard let page else { return }
-                self.rockets.append(contentsOf: await fetchPage(page))
+                await fetchPage(page)
             }
         }
 
-        private func fetchPage(_ page: Int) async -> [Rocket] {
+        private func fetchPage(_ page: Int) async {
             do {
                 let response = try await rocketProvider.fetch(atPage: page)
                 self.page = response.nextPage
-                return response.items
+                self.state.add(items: response.items)
             } catch {
-                print("Error fetching next page of launches: \(error)")
-                return []
+                print("Error fetching rockets: \(error)")
+                state = .error
             }
         }
     }

@@ -33,7 +33,7 @@ extension LaunchesView {
             }
         }
 
-        var state: State = .loaded(launches: [])
+        var state: ModelState<Launch> = .loaded(items: [])
 
         private var filtersSinceLastFetch: (isActive: Bool, filters: [DateRangeFilter])
 
@@ -106,8 +106,9 @@ extension LaunchesView {
             do {
                 let response = try await launchProvider.fetch(atPage: page, filters: filterProvider.isActive ? filters : [])
                 self.page = response.nextPage
-                self.state.add(launches: response.items)
+                self.state.add(items: response.items)
             } catch {
+                print("Error fetching launches: \(error)")
                 state = .error
             }
         }
