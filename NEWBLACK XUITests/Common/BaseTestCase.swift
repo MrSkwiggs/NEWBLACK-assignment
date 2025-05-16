@@ -19,12 +19,15 @@ open class BaseTestCase: XCTestCase {
     }
 
     open override func setUp() async throws {
+        try await super.setUp()
         await MainActor.run {
             app = .init()
         }
     }
 
-    open override func tearDown() {}
+    open override func tearDown() {
+        super.tearDown()
+    }
 
     public func activate() {
         app.activate()
@@ -54,7 +57,7 @@ extension BaseTestCase {
     @discardableResult
     func navigateToHomePage(loadingDuration: Int = 0) -> HomePage {
         launch(with: [.state(.success), .loadDuration(loadingDuration)])
-        app.activate()
+        activate()
 
         return HomePage(app: app, identifiers: \.home, testCase: self)
     }
