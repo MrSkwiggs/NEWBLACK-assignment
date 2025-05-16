@@ -9,14 +9,28 @@ Dorian Grolaux
 
 ## Table of Contents
 
-- [Architecture](#Architecture)
-- Main Features
-- UI Components
-- Data Flow
-- Testing
-- Debugging
-- Project Structure
-- Package Documentation
+- [NEWBLACK X - Assignment](#newblack-x---assignment)
+  - [Overview](#overview)
+  - [Author](#author)
+  - [Table of Contents](#table-of-contents)
+  - [Architecture](#architecture)
+    - [Key Architectural Components](#key-architectural-components)
+  - [Main Features](#main-features)
+    - [Home Screen](#home-screen)
+    - [Launches](#launches)
+    - [Rockets](#rockets)
+  - [UI Components](#ui-components)
+  - [Data Flow](#data-flow)
+    - [State Management](#state-management)
+  - [Testing](#testing)
+    - [UI Testing](#ui-testing)
+  - [Debugging](#debugging)
+  - [Project Structure](#project-structure)
+  - [Package Documentation](#package-documentation)
+    - [Networking Package](#networking-package)
+    - [Core Package](#core-package)
+  - [Getting Started](#getting-started)
+  - [Technical Requirements](#technical-requirements)
 
 ## Architecture
 
@@ -141,8 +155,11 @@ Packages/
 
 The app includes two main packages:
 
-- Core Package: Contains data models and business logic
-- Networking Package: Handles API communication
+- [Core Package](/Packages/Core): Contains data models and business logic
+    1. **[Entities](/Packages/Core/Sources/Entities/README.md)**: Defines the domain models representing SpaceX data, such as `Launch`, `Rocket`, and `Launchpad`.
+    2. **[API](/Packages/Core/Sources/API/README.md)**: Contains the endpoints and services for interacting with the SpaceX API, including request and response handling.
+    3. **[Shared](/Packages/Core/Sources/Shared/README.md)**: Provides shared utilities, protocols, and extensions used across the app and other packages.
+- [Networking Package](/Packages/Networking/README.md): Handles API communication
 
 ### Networking Package
 
