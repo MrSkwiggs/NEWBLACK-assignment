@@ -10,7 +10,7 @@ public final class ViewIdentifiers: Sendable {
     /// The ID class of a view.
     open class ID: BaseViewIdentifiers {
         public init(file: String) {
-            super.init(bundleIdentifier: "PinchAssignment", file: file)
+            super.init(bundleIdentifier: "NewblackAssignment", file: file)
         }
 
         public func id(_ id: String) -> String {
