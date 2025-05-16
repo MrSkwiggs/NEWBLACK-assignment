@@ -10,8 +10,8 @@ import Entities
 
 nonisolated(unsafe) private let isoFormatter = ISO8601DateFormatter()
 
-public extension Launch {
-    static let munaholicAchievement = Launch(
+extension Launch: Mockable {
+    public static let munaholicAchievement = Launch(
         id: "L-001",
         date: isoFormatter.date(from: "2023-04-12T09:15:00Z")!,
         isUpcoming: false,
@@ -24,7 +24,7 @@ public extension Launch {
         details: "Jebediah Kerman nailed his precision landing within 10 meters of the planting flag. 👏"
     )
 
-    static let seaOfKerbalDebut = Launch(
+    public static let seaOfKerbalDebut = Launch(
         id: "L-002",
         date: isoFormatter.date(from: "2024-11-05T18:30:00Z")!,
         isUpcoming: false,
@@ -39,7 +39,7 @@ public extension Launch {
         details: "Big props to Bob Kerman for waving at the cameras as we sank gracefully. 🚢💥"
     )
 
-    static let minmusMambo = Launch(
+    public static let minmusMambo = Launch(
         id: "L-003",
         date: isoFormatter.date(from: "2025-07-01T14:00:00Z")!,
         isUpcoming: true,
@@ -52,7 +52,7 @@ public extension Launch {
         details: "Payload: 100 kilos of Jeb’s leftover Mun samples + inflatable dance floor for Minmus surface boogie."
     )
 
-    static let krakenUnleashed = Launch(
+    public static let krakenUnleashed = Launch(
         id: "L-004",
         date: isoFormatter.date(from: "2024-02-29T00:00:00Z")!,
         isUpcoming: false,
@@ -67,4 +67,13 @@ public extension Launch {
         ],
         details: "Turns out, don’t mix leftover fuel from Jool missions with standard kerosene. Lesson learned the hard way."
     )
+
+    public static var mocks: [Launch] {
+        [
+            munaholicAchievement,
+            seaOfKerbalDebut,
+            minmusMambo,
+            krakenUnleashed
+        ]
+    }
 }

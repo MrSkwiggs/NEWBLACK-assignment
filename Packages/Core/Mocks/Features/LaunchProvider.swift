@@ -36,7 +36,7 @@ public actor MockLaunchProvider: LaunchProviding {
     ///   - hookLaunches: This closure is called during the `fetch` method. It can be used as a hook when performing tests, validating that certain parameters are passed or that the function is called. You c
     public init(
         pages: [Result<Paginated<Launch>, Error>],
-        duration: MockDuration = .short,
+        duration: MockDuration = .oneSecond,
         hookLaunches: @escaping LaunchesHook = { _, _, response in response }
     ) {
         self.pages = pages
@@ -48,8 +48,13 @@ public actor MockLaunchProvider: LaunchProviding {
         atPage page: Int,
         filters: [DateRangeFilter]
     ) async throws -> Paginated<Launch> {
-        let response = pages.isEmpty ? .success(.empty()) : pages.removeFirst()
+        let response = pages.isEmpty ? .success(.empty()) : pages.first!
 
+        defer {
+            if case .success = pages.first {
+                pages.removeFirst()
+            }
+        }
         return try await handler { [hookLaunches] in
             try hookLaunches(page, filters, response).get()
         }
@@ -59,7 +64,7 @@ public actor MockLaunchProvider: LaunchProviding {
 public extension MockLaunchProvider {
     /// A mock provider that returns an empty list of launches.
     static func empty(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         _ hookLaunches: @escaping LaunchesHook = { _, _, response in response }
     ) -> Self {
         .init(
@@ -71,7 +76,7 @@ public extension MockLaunchProvider {
 
     /// A mock provider that returns a list of launches.
     static func success(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         hookLaunches: @escaping LaunchesHook = { _, _, response in response }
     ) -> Self {
         .init(
@@ -86,7 +91,7 @@ public extension MockLaunchProvider {
 
     /// A mock provider that returns a failure.
     static func failure(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         hookLaunches: @escaping LaunchesHook = { _, _, response in response
         }) -> Self {
         .init(

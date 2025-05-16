@@ -7,8 +7,8 @@
 
 import Entities
 
-public extension Engines {
-    static func raptor(count: Int) -> Engines {
+extension Engines: Mockable {
+    public static func raptor(count: Int) -> Engines {
         .init(
             isp: .init(
                 seaLevel: 330,
@@ -26,7 +26,7 @@ public extension Engines {
         )
     }
 
-    static func merlin(count: Int) -> Engines {
+    public static func merlin(count: Int) -> Engines {
         .init(
             isp: .init(
                 seaLevel: 267,
@@ -42,5 +42,12 @@ public extension Engines {
             propellant2: "Liquid Oxygen",
             thrustToWeightRatio: 96
         )
+    }
+
+    public static var mocks: [Engines] {
+        [
+            raptor(count: 9),
+            merlin(count: 1)
+        ]
     }
 }

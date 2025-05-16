@@ -8,7 +8,7 @@
 import Foundation
 import Entities
 
-extension Launchpad {
+extension Launchpad: Mockable {
     public static let alpha = Launchpad(
         id: "P-Alpha",
         name: "KSC LC-39A",
@@ -48,4 +48,8 @@ extension Launchpad {
         status: .retired,
         launchCount: 7
     )
+
+    public static var mocks: [Launchpad] {
+        return [alpha, omega, beta, delta]
+    }
 }

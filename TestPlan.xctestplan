@@ -27,15 +27,22 @@
     {
       "target" : {
         "containerPath" : "container:Packages\/Core",
+        "identifier" : "SharedTests",
+        "name" : "SharedTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Core",
         "identifier" : "APITests",
         "name" : "APITests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Core",
-        "identifier" : "SharedTests",
-        "name" : "SharedTests"
+        "containerPath" : "container:NEWBLACK X.xcodeproj",
+        "identifier" : "E7520CCE2DD6676C00574292",
+        "name" : "NEWBLACK XTests"
       }
     }
   ],

@@ -33,7 +33,7 @@ extension LaunchesView {
             }
         }
 
-        var launches: [Launch] = []
+        var state: ModelState<Launch> = .loaded(items: [])
 
         private var filtersSinceLastFetch: (isActive: Bool, filters: [DateRangeFilter])
 
@@ -49,7 +49,6 @@ extension LaunchesView {
             }
         }
 
-        var showSkeleton: Bool = false
         var showDateRangeFilter: Bool = false
 
         var hasNextPage: Bool {
@@ -75,7 +74,7 @@ extension LaunchesView {
 
         func userDidPressClearFilters() {
             isFilterActive = false
-
+            filtersSinceLastFetch.isActive = false
             refreshTask = Task {
                 await refresh()
             }
@@ -92,26 +91,25 @@ extension LaunchesView {
         }
 
         func refresh() async {
-            showSkeleton = true
-            defer { showSkeleton = false }
-            self.launches = await fetchPage(0)
+            state.setLoading()
+            await fetchPage(0)
         }
 
         private func fetchNextPage() {
             pageTask = Task {
                 guard let page else { return }
-                self.launches.append(contentsOf: await fetchPage(page))
+                await fetchPage(page)
             }
         }
 
-        private func fetchPage(_ page: Int) async -> [Launch] {
+        private func fetchPage(_ page: Int) async {
             do {
                 let response = try await launchProvider.fetch(atPage: page, filters: filterProvider.isActive ? filters : [])
                 self.page = response.nextPage
-                return response.items
+                self.state.add(items: response.items)
             } catch {
-                print("Error fetching next page of launches: \(error)")
-                return []
+                print("Error fetching launches: \(error)")
+                state = .error
             }
         }
     }
