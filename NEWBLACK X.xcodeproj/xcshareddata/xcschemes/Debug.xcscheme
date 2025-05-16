@@ -46,6 +46,17 @@
                ReferencedContainer = "container:NEWBLACK X.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E73BCC1D2DD741F50086C5F1"
+               BuildableName = "NEWBLACK XUITests.xctest"
+               BlueprintName = "NEWBLACK XUITests"
+               ReferencedContainer = "container:NEWBLACK X.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

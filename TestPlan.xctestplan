@@ -19,16 +19,23 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:Packages\/Networking",
-        "identifier" : "NetworkingTests",
-        "name" : "NetworkingTests"
+        "containerPath" : "container:NEWBLACK X.xcodeproj",
+        "identifier" : "E7520CCE2DD6676C00574292",
+        "name" : "NEWBLACK XTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Core",
-        "identifier" : "SharedTests",
-        "name" : "SharedTests"
+        "containerPath" : "container:NEWBLACK X.xcodeproj",
+        "identifier" : "E73BCC1D2DD741F50086C5F1",
+        "name" : "NEWBLACK XUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Networking",
+        "identifier" : "NetworkingTests",
+        "name" : "NetworkingTests"
       }
     },
     {
@@ -40,9 +47,9 @@
     },
     {
       "target" : {
-        "containerPath" : "container:NEWBLACK X.xcodeproj",
-        "identifier" : "E7520CCE2DD6676C00574292",
-        "name" : "NEWBLACK XTests"
+        "containerPath" : "container:Packages\/Core",
+        "identifier" : "SharedTests",
+        "name" : "SharedTests"
       }
     }
   ],
