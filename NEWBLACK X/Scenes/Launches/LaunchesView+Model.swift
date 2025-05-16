@@ -33,7 +33,7 @@ extension LaunchesView {
             }
         }
 
-        var state: State = .loading(previousLaunches: [])
+        var state: State = .loaded(launches: [])
 
         private var filtersSinceLastFetch: (isActive: Bool, filters: [DateRangeFilter])
 
@@ -74,7 +74,7 @@ extension LaunchesView {
 
         func userDidPressClearFilters() {
             isFilterActive = false
-
+            filtersSinceLastFetch.isActive = false
             refreshTask = Task {
                 await refresh()
             }
