@@ -10,9 +10,8 @@ import SwiftUI
 import Shared
 import Entities
 
-final class ViewModelFactory: SharedContainer, ObservableObject {
+final class ViewModelFactory: ManagedContainer, ObservableObject {
 
-    static let shared: ViewModelFactory = .init()
     let manager: ContainerManager = .init()
 
     private var domains: DomainFactory { DomainFactory.shared }
@@ -40,5 +39,14 @@ final class ViewModelFactory: SharedContainer, ObservableObject {
         self { @MainActor in
             .init(rocketProvider: self.features.rocketProvider())
         }
+    }
+}
+
+import Mocks
+extension ViewModelFactory {
+    static func mock(duration: MockDuration) -> ViewModelFactory {
+        DomainFactory.useMocks()
+        FeatureFactory.useMocks(mockDuration: duration)
+        return .init()
     }
 }
