@@ -140,22 +140,27 @@ import Mocks
 import Shared
 
 #Preview {
+
+    let factory = ViewModelFactory.mock(duration: .twoSeconds)
+
     NavigationStack {
-        LaunchesView(model: .init(launchProvider: MockLaunchProvider.success(), filterProvider: MockFilterProvider.empty))
+        LaunchesView(model: factory.launchesViewModel())
     }
-    .environmentObject(ViewModelFactory.mock(duration: .medium))
+    .environmentObject(factory)
 }
 
 #Preview("Empty") {
+    let factory = ViewModelFactory.mock(duration: .twoSeconds)
+
     NavigationStack {
         LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty(), filterProvider: MockFilterProvider.empty))
     }
-    .environmentObject(ViewModelFactory.mock(duration: .medium))
+    .environmentObject(factory)
 }
 
 #Preview("Error") {
     NavigationStack {
         LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure(), filterProvider: MockFilterProvider.empty))
     }
-    .environmentObject(ViewModelFactory.mock(duration: .medium))
+    .environmentObject(ViewModelFactory.mock(duration: .fiveSeconds))
 }

@@ -23,10 +23,13 @@ public struct MockDuration : Sendable{
     public static let instant: MockDuration = .init(seconds: 0)
 
     /// A loading duration of 1 second
-    public static let short: MockDuration = .init(seconds: 1)
+    public static let oneSecond: MockDuration = .init(seconds: 1)
 
     /// A loading duration of 2 seconds
-    public static let medium: MockDuration = .init(seconds: 2)
+    public static let twoSeconds: MockDuration = .init(seconds: 2)
+
+    /// A loading duration of 5 seconds
+    public static let fiveSeconds: MockDuration = .init(seconds: 5)
 
     /// A loading duration of 60 seconds
     public static let minute: MockDuration = .init(seconds: 60)

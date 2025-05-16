@@ -10,7 +10,7 @@ import Shared
 
 public extension FeatureFactory {
     /// Configures the factory to use mock implementations.
-    static func useMocks(mockDuration: MockDuration = .short) {
+    static func useMocks(mockDuration: MockDuration = .oneSecond) {
         shared.filterProvider.register { @MainActor in
             MockFilterProvider.two
         }

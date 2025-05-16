@@ -48,7 +48,7 @@ public actor MockRocketProvider: RocketProviding {
     ///   - hookRocketes: This closure is called during the `fetch` method. It can be used as a hook when performing tests, validating that certain parameters are passed or that the function is called. You c
     public init(
         pages: [Result<Paginated<Rocket>, Error>],
-        duration: MockDuration = .short,
+        duration: MockDuration = .oneSecond,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) {
@@ -81,7 +81,7 @@ public extension MockRocketProvider {
 
     /// A mock provider that returns an empty list of launches.
     static func empty(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {
@@ -95,7 +95,7 @@ public extension MockRocketProvider {
 
     /// A mock provider that returns a list of launches.
     static func success(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {
@@ -112,7 +112,7 @@ public extension MockRocketProvider {
 
     /// A mock provider that returns a failure.
     static func failure(
-        mockDuration: MockDuration = .short,
+        mockDuration: MockDuration = .oneSecond,
         hookRockets: @escaping RocketsHook = { _, response in response },
         hookRocket: @escaping RocketHook = { _, response in response }
     ) -> Self {

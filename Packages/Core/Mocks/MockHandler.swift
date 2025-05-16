@@ -22,6 +22,7 @@ public struct MockHandler: Sendable {
     }
 
     public static let instant = MockHandler(.instant)
-    public static let short = MockHandler(.short)
-    public static let medium = MockHandler(.medium)
+    public static let short = MockHandler(.oneSecond)
+    public static let medium = MockHandler(.twoSeconds)
+    public static let long = MockHandler(.fiveSeconds)
 }
