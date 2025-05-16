@@ -2,86 +2,166 @@
 
 ## Overview
 
-NEWBLACK X is an iOS application that fetches and displays SpaceX launch and rocket information. The app uses a modern Swift architecture with SwiftUI, Swift Concurrency, and follows MVVM design patterns.
+NEWBLACK X is an iOS application that showcases SpaceX launches and rockets using a modern Swift architecture. The app demonstrates best practices in iOS development with SwiftUI, Swift Concurrency, and MVVM design patterns. It allows users to browse SpaceX launches and rockets, view detailed information, and apply filters.
 
 ## Author
 Dorian Grolaux
 
+## Table of Contents
+
+- [Architecture](#Architecture)
+- Main Features
+- UI Components
+- Data Flow
+- Testing
+- Debugging
+- Project Structure
+- Package Documentation
+
 ## Architecture
 
-The application is structured using a modular architecture with the following components:
+NEWBLACK X follows a modular architecture with clear separation of concerns:
 
-### Core Components
+- **App Layer**: Main UI components, navigation, and view models
+- **Feature Layer**: Business logic and UI implementation
+- **Domain Layer**: Core business logic and data models
+- **Package Layer**: Reusable components across the app
 
-- **App Structure**: Tab-based navigation with two main sections - Launches and Rockets
-- **Packages**:
-  - Core: Contains data models and business logic
-  - Networking: Handles API communication
+The application uses SwiftUI for the UI layer and follows the MVVM (Model-View-ViewModel) pattern for clear separation between UI and business logic.
 
-### Design Patterns
+### Key Architectural Components
 
-- **MVVM**: View Models are separated from Views for better testability
-- **Dependency Injection**: Uses [Factory](https://github.com/hmlongco/Factory) framework
-- **Observable Objects**: Leverages Swift's `@Observable` for state management
+- **ViewModelFactory**: Centralized factory for creating and injecting view models
+- **ModelState**: Generic state management for handling loading, success, and error states
+- **Dependency Injection**: Using the [Factory](https://github.com/hmlongco/Factory) framework
 
-## Features
+## Main Features
+
+### Home Screen
+The app provides a tab-based navigation with two main sections:
+
+- **Launches Tab**: Browse all SpaceX launches
+- **Rockets Tab**: Explore SpaceX rockets
 
 ### Launches
 
-The Launches tab displays SpaceX launches with the following capabilities:
+The Launches section provides:
 
-- **Launch List**: Shows all SpaceX launches with pagination support
-- **Date Range Filtering**: Filter launches by date ranges
-- **Launch Details**: View detailed information about each launch
-- **Related Content**: Access rocket and launchpad information from a launch
+- List of all SpaceX launches with pagination support
+- Date range filtering to narrow down launches
+- Detailed view of each launch including:
+  - Launch details and status
+  - Associated rocket information
+  - Launchpad details
+  - External links (Wikipedia, YouTube)
 
 ### Rockets
 
-The Rockets tab displays information about SpaceX rockets:
+The Rockets section offers:
 
-- **Rocket List**: Displays all SpaceX rockets with pagination
-- **Rocket Details**: Shows comprehensive specifications for each rocket
-- **Engine Information**: Detailed engine specifications with ISP details
+- List of all SpaceX rockets with pagination
+- Detailed specifications for each rocket including:
+  - Physical dimensions
+  - Engine specifications
+  - Success rate statistics
+  - Image gallery
 
 ## UI Components
 
 The app includes several reusable UI components:
 
-- `AsyncGallery`: Image gallery with async loading
-- `StickyHeaderList`: List with scaling sticky header
-- `DateRangeFilter`: UI for selecting date ranges
-- `WebView`: In-app web browser for external links
+- **AsyncGallery**: Image gallery with asynchronous loading
+- **StickyHeaderList**: List with scaling sticky header
+- **DateRangeFilter**: UI for selecting date ranges
+- **WebView**: In-app web browser for external links
+- **LabelledCapsule**: Consistent UI element for displaying labeled information
 
 ## Data Flow
 
-1. **View Model Initialization**: Factory creates view models with appropriate dependencies
+1. **View Initialization**: Views are created with injected view models
 2. **Data Loading**: View models request data from providers
-3. **State Management**: `ModelState` tracks loading, success, and error states
-4. **UI Updates**: SwiftUI views react to state changes
+3. **State Management**: Views react to changes in model state
+4. **User Interaction**: Actions are passed to view models to update state or fetch new data
+
+### State Management
+
+The `ModelState` enum provides a consistent way to handle different states:
+
+- `loading`: Shows placeholders while data is being fetched
+- `loaded`: Displays the fetched items
+- `noContent`: Presents a message when no data is available
+- `error`: Shows an error message with retry option
 
 ## Testing
 
-The application includes both unit tests and UI tests:
+NEWBLACK X includes both unit tests and UI tests:
 
-- **Unit Tests**: Tests for view models and model state
-- **UI Tests**: Integration tests for key user flows using the Page Object pattern
+- **Unit Tests**: Test view models and model state logic
+- **UI Tests**: Integration tests using the Page Object pattern
+- **TestPlan**: Configured test plan for running all tests
 
-## Debug Features
+### UI Testing
+
+The app implements the Page Object pattern for UI testing, making tests more maintainable:
+
+- **BasePage**: Abstract base class for all page objects
+- **HomePage**: Represents the main tabs interface
+- **LaunchesPage**: Represents the launches list
+- **LaunchPage**: Represents a specific launch detail screen
+
+## Debugging
+
+The app includes several features to help with debugging:
 
 - **Launch Arguments**: Configure mock behavior with launch arguments
 - **Mock Providers**: Substitute real API calls with predictable responses
 - **Mock Durations**: Simulate network delays for testing loading states
 
-## Resource Management
+## Project Structure
 
-- Images are loaded asynchronously using `AsyncImage`
-- Pagination is used to minimize memory usage and network traffic
+```
+NEWBLACK X/
+  ├── NEWBLACK_XApp.swift     # App entry point
+  ├── Assets.xcassets/        # App assets
+  ├── Common/                 # Shared app components
+  ├── Composition/            # Dependency composition
+  ├── Extensions/             # Swift extensions
+  ├── Scenes/                 # App UI scenes
+  │   ├── Home/               # Main tab view
+  │   ├── Launches/           # Launches feature
+  │   └── Rockets/            # Rockets feature
+  └── Views/                  # Reusable UI components
 
-## External Resources
+Packages/
+  ├── Core/                   # Core business logic
+  └── Networking/             # Network layer
+```
 
-- SpaceX API for launch and rocket data
-- Wikipedia links for additional information
-- YouTube links for launch videos
+## Package Documentation
+
+The app includes two main packages:
+
+- Core Package: Contains data models and business logic
+- Networking Package: Handles API communication
+
+### Networking Package
+
+The Networking package provides a protocol-oriented Swift networking layer. See the Networking Documentation for detailed information about:
+
+- Basic usage examples
+- Request handling
+- Authentication
+- Error handling
+- Best practices
+
+### Core Package
+
+The Core package contains the business logic and domain models. The package includes:
+
+- Entities: Domain models representing SpaceX data
+- API: Endpoints and services for the SpaceX API
+- Shared: Shared utilities and protocols
+- Mocks: Mock data for testing and development
 
 ## Getting Started
 
@@ -89,9 +169,10 @@ To run the application:
 
 1. Clone the repository
 2. Open the project in Xcode
-3. Build and run on a simulator or device
+3. Update signing configuration
+4. Build and run on a simulator or device
 
-For development with mocked data, you can add launch arguments in the scheme editor.
+For development with mocked data, run the Mocked scheme. Otherwise, running the Debug scheme will properly fetch API data.
 
 ## Technical Requirements
 
