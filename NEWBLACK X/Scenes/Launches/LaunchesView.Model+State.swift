@@ -7,6 +7,7 @@
 
 import Foundation
 import Entities
+import Mocks
 
 extension LaunchesView.Model {
     enum State {
@@ -16,32 +17,38 @@ extension LaunchesView.Model {
         case error
 
         mutating func add(launches: [Launch]) {
-            switch self {
-            case .loading:
-                if launches.isEmpty {
-                    self = .noContent
-                } else {
-                    self = .loaded(launches: launches)
-                }
-            case .loaded(launches: let previousLaunches):
-                self = .loaded(launches: previousLaunches + launches)
-            case .noContent:
-                self = .loaded(launches: launches)
-            case .error:
-                self = .loaded(launches: launches)
+            if case let .loaded(previousLaunches) = self {
+                set(launches: previousLaunches + launches)
+            } else {
+                set(launches: launches)
             }
         }
 
+        private mutating func set(launches: [Launch]) {
+            guard !launches.isEmpty else {
+                self = .noContent
+                return
+            }
+            self = .loaded(launches: launches)
+        }
+
         mutating func setLoading() {
+            let mocks: [Launch] = [
+                .krakenUnleashed,
+                .minmusMambo,
+                .munaholicAchievement,
+                .seaOfKerbalDebut
+            ]
             switch self {
             case .loading(previousLaunches: _):
                 break
             case .loaded(let launches):
+                let launches = launches.isEmpty ? mocks : launches
                 self = .loading(previousLaunches: launches)
             case .noContent:
-                self = .loading(previousLaunches: [])
+                self = .loading(previousLaunches: mocks)
             case .error:
-                self = .loading(previousLaunches: [])
+                self = .loading(previousLaunches: mocks)
             }
         }
     }
