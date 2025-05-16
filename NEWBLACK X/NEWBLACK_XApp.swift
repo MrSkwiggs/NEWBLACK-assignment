@@ -25,7 +25,7 @@ struct NEWBLACK_XApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
-                .environmentObject(ViewModelFactory())
+                .environmentObject(viewModelFactory)
         }
     }
 }
