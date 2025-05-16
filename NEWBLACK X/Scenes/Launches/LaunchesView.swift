@@ -56,6 +56,7 @@ struct LaunchesView: View {
             }
         }
         .animation(.default, value: model.isFilterActive)
+        .rootIdentifier(\.launches)
     }
 
     @ViewBuilder
@@ -79,7 +80,8 @@ struct LaunchesView: View {
                     Spacer()
                 }
             }
-
+            .id(UUID())
+            .elementIdentifier(\.launches.pageLoader)
         }
     }
 
@@ -132,6 +134,7 @@ struct LaunchesView: View {
             } label: {
                 Row(launch: launch)
             }
+            .elementIdentifier(\.launches.row)
         }
     }
 }

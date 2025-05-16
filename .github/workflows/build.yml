@@ -18,7 +18,7 @@ jobs:
       run: |
         xcodebuild \
           -project "NEWBLACK X.xcodeproj" \
-          -scheme "NEWBLACK X" \
+          -scheme "Debug" \
           -testPlan TestPlan \
           -destination 'platform=iOS Simulator,name=iPhone 16' \
           clean test

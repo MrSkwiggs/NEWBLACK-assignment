@@ -26,13 +26,17 @@ final class ViewModelFactory: ManagedContainer, ObservableObject {
         }
     }
 
-    func launchViewModel(for launch: Launch) -> LaunchView.Model {
+    fileprivate var launchViewModel: ParameterFactory<Launch, LaunchView.Model> {
         self { @MainActor in
-            LaunchView.Model(
-                launch: launch,
+            .init(
+                launch: $0,
                 rocketProvider: self.features.rocketProvider()
             )
-        }()
+        }
+    }
+
+    func launchViewModel(for launch: Launch) -> LaunchView.Model {
+        launchViewModel(launch)
     }
 
     var rocketsViewModel: Factory<RocketsView.Model> {
@@ -47,6 +51,12 @@ extension ViewModelFactory {
     static func mock(duration: MockDuration) -> ViewModelFactory {
         DomainFactory.useMocks()
         FeatureFactory.useMocks(mockDuration: duration)
+        return .init()
+    }
+
+    static func mock(for state: LaunchArgument.State, with duration: MockDuration) -> ViewModelFactory {
+        DomainFactory.useMocks()
+        FeatureFactory.useMocks(with: state, mockDuration: duration)
         return .init()
     }
 }

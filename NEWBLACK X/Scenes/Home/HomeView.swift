@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Entities
 
 struct HomeView: View {
 
@@ -21,12 +22,15 @@ struct HomeView: View {
                     )
                 }
             }
+            .accessibilityIdentifier(ViewIdentifiers.main.home.launchesTab)
             Tab("Rockets", systemImage: "airplane") {
                 NavigationStack {
                     RocketsView(model: viewModelFactory.rocketsViewModel())
                 }
             }
+            .accessibilityIdentifier(ViewIdentifiers.main.home.rocketsTab)
         }
+        .rootIdentifier(\.home)
     }
 }
 

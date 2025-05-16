@@ -61,6 +61,9 @@ extension LaunchesView {
         @ObservationIgnored
         private var refreshTask: Task<Void, Never>? {
             willSet {
+                if newValue == nil {
+                    return
+                }
                 pageTask?.cancel()
             }
         }
@@ -93,9 +96,11 @@ extension LaunchesView {
         func refresh() async {
             state.setLoading()
             await fetchPage(0)
+            refreshTask = nil
         }
 
         private func fetchNextPage() {
+            guard refreshTask == nil else { return }
             pageTask = Task {
                 guard let page else { return }
                 await fetchPage(page)

@@ -47,12 +47,14 @@ struct LaunchView: View {
                         } label: {
                             Text(rocket.name)
                         }
+                        .elementIdentifier(\.launches.launch.rocket)
                     } else {
                         ProgressView()
                             .progressViewStyle(.circular)
                             .task {
                                 model.viewDidAppear()
                             }
+                            .elementIdentifier(\.launches.launch.rocketPlaceholder)
                     }
                 } label: {
                     Text("Rocket")
@@ -67,6 +69,7 @@ struct LaunchView: View {
                 } label: {
                     Text("Launchpad")
                 }
+                .elementIdentifier(\.launches.launch.launchpad)
             }
 
             Section("Links") {
@@ -93,6 +96,7 @@ struct LaunchView: View {
                             Text("Read more")
                         }
                     }
+                    .elementIdentifier(\.launches.launch.wikipediaLink)
                 }
             }
         }
@@ -101,11 +105,14 @@ struct LaunchView: View {
                 switch item {
                 case let .rocket(rocket):
                     RocketView(rocket: rocket)
+                        .elementIdentifier(\.launches.launch.rocketSheet)
                 case let .launchpad(launchpad):
                     LaunchpadView(launchpad: launchpad)
+                        .elementIdentifier(\.launches.launch.launchpadSheet)
                 case let .link(url):
                     WebView(url: url)
                         .ignoresSafeArea()
+                        .elementIdentifier(\.launches.launch.linkSheet)
                 }
             }
             .stickyHeaderListStyle(.small)
@@ -113,6 +120,7 @@ struct LaunchView: View {
             .presentationDragIndicator(.visible)
         }
         .navigationTitle(model.launch.name)
+        .rootIdentifier(\.launches.launch)
     }
 
     var launchStatusLabel: String {

@@ -30,6 +30,7 @@ struct RocketsView: View {
         .refreshable {
             await model.refresh()
         }
+        .rootIdentifier(\.rockets)
     }
 
     @ViewBuilder
