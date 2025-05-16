@@ -21,14 +21,14 @@ struct HomeView: View {
                         model: viewModelFactory.launchesViewModel()
                     )
                 }
-                .elementIdentifier(\.home.launchesTab)
             }
+            .accessibilityIdentifier(ViewIdentifiers.main.home.launchesTab)
             Tab("Rockets", systemImage: "airplane") {
                 NavigationStack {
                     RocketsView(model: viewModelFactory.rocketsViewModel())
                 }
-                .elementIdentifier(\.home.rocketsTab)
             }
+            .accessibilityIdentifier(ViewIdentifiers.main.home.rocketsTab)
         }
         .rootIdentifier(\.home)
     }

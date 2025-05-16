@@ -14,6 +14,9 @@ extension ViewIdentifiers {
             super.init(file: "Launches")
         }
 
+        lazy var row = id("row")
+        lazy var pageLoader = id("pageLoader")
+        
         lazy var launch: Launch = .init(key: key)
     }
 

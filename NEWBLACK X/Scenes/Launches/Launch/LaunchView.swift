@@ -69,6 +69,7 @@ struct LaunchView: View {
                 } label: {
                     Text("Launchpad")
                 }
+                .elementIdentifier(\.launches.launch.launchpad)
             }
 
             Section("Links") {
@@ -95,6 +96,7 @@ struct LaunchView: View {
                             Text("Read more")
                         }
                     }
+                    .elementIdentifier(\.launches.launch.wikipediaLink)
                 }
             }
         }

@@ -17,6 +17,10 @@ extension ViewIdentifiers {
         lazy var rocket = id("rocket")
         lazy var rocketPlaceholder = id("rocketPlaceholder")
 
+        lazy var launchpad = id("launchpad")
+
+        lazy var wikipediaLink = id("wikipediaLink")
+
         lazy var rocketSheet = id("rocketSheet")
         lazy var launchpadSheet = id("launchpadSheet")
         lazy var linkSheet = id("linkSheet")

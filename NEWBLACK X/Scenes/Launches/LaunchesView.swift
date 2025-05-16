@@ -81,6 +81,7 @@ struct LaunchesView: View {
                 }
             }
             .id(UUID())
+            .elementIdentifier(\.launches.pageLoader)
         }
     }
 
@@ -133,6 +134,7 @@ struct LaunchesView: View {
             } label: {
                 Row(launch: launch)
             }
+            .elementIdentifier(\.launches.row)
         }
     }
 }
