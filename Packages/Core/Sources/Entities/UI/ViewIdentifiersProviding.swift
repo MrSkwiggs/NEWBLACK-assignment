@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 /// A view identifier
 public protocol ViewIdentifiersProviding {
@@ -75,6 +74,9 @@ open class BaseViewIdentifiers: ViewIdentifiersProviding {
     }
 }
 
+#if canImport(SwiftUI)
+import SwiftUI
+
 public extension View {
     /// Assigns the root accessibility identifier to this view
     func rootIdentifier<Base: BaseViewIdentifiers>(_ identifer: Base) -> some View {
@@ -88,3 +90,4 @@ public extension View {
         self.accessibilityIdentifier(identifier)
     }
 }
+#endif

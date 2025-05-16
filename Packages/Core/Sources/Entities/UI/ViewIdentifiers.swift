@@ -5,8 +5,6 @@
 //  Created by Dorian on 16/05/2025.
 //
 
-import SwiftUI
-
 /// A base class for view identifiers.
 public final class ViewIdentifiers: Sendable {
     /// The ID class of a view.
@@ -24,6 +22,9 @@ public final class ViewIdentifiers: Sendable {
     public static let main: ViewIdentifiers = .init()
 }
 
+#if canImport(SwiftUI)
+import SwiftUI
+
 public extension View {
     /// Assigns the root accessibility identifier to this view
     func rootIdentifier<Base: BaseViewIdentifiers>(_ identifer: KeyPath<ViewIdentifiers, Base>) -> some View {
@@ -37,3 +38,4 @@ public extension View {
         self.accessibilityIdentifier(ViewIdentifiers.main[keyPath: identifier])
     }
 }
+#endif
