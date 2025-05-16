@@ -11,25 +11,25 @@ import Entities
 import Factory
 
 struct LaunchesView: View {
-    
+
     @EnvironmentObject
     var viewModelFactory: ViewModelFactory
-    
+
     @State
     var model: Model
-    
+
     var body: some View {
         List {
             switch model.state {
             case let .loading(previousLaunches):
                 placeholders(for: previousLaunches)
-                
+
             case let .loaded(launches):
                 content(for: launches)
-                
+
             case .noContent:
                 noContent()
-                
+
             case .error:
                 error()
             }
@@ -57,13 +57,13 @@ struct LaunchesView: View {
         }
         .animation(.default, value: model.isFilterActive)
     }
-    
+
     @ViewBuilder
     private func placeholders(for launches: [Launch]) -> some View {
         rows(for: launches)
             .redacted(reason: .placeholder)
     }
-    
+
     @ViewBuilder
     private func content(for launches: [Launch]) -> some View {
         rows(for: launches)
@@ -79,10 +79,10 @@ struct LaunchesView: View {
                     Spacer()
                 }
             }
-            
+
         }
     }
-    
+
     @ViewBuilder
     private func noContent() -> some View {
         ContentUnavailableView {
@@ -102,7 +102,7 @@ struct LaunchesView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func error() -> some View {
         ContentUnavailableView {
@@ -123,7 +123,7 @@ struct LaunchesView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func rows(for launches: [Launch]) -> some View {
         ForEach(launches) { launch in
@@ -137,23 +137,25 @@ struct LaunchesView: View {
 }
 
 import Mocks
+import Shared
+
 #Preview {
     NavigationStack {
         LaunchesView(model: .init(launchProvider: MockLaunchProvider.success(), filterProvider: MockFilterProvider.empty))
     }
-    .environmentObject(ViewModelFactory())
+    .environmentObject(ViewModelFactory.mock(duration: .medium))
 }
 
 #Preview("Empty") {
     NavigationStack {
         LaunchesView(model: .init(launchProvider: MockLaunchProvider.empty(), filterProvider: MockFilterProvider.empty))
     }
-    .environmentObject(ViewModelFactory())
+    .environmentObject(ViewModelFactory.mock(duration: .medium))
 }
 
 #Preview("Error") {
     NavigationStack {
         LaunchesView(model: .init(launchProvider: MockLaunchProvider.failure(), filterProvider: MockFilterProvider.empty))
     }
-    .environmentObject(ViewModelFactory())
+    .environmentObject(ViewModelFactory.mock(duration: .medium))
 }
