@@ -101,8 +101,8 @@ public extension MockRocketProvider {
     ) -> Self {
         .init(
             pages: [
-                .success(.init(items: [.falcon9, .kraken], page: 1, pageSize: 2, nextPage: 2)),
-                .success(.init(items: [.starship], page: 2, pageSize: 2, nextPage: nil))
+                .success(.init(items: [.starship, .falcon9], page: 1, pageSize: 2, nextPage: 2)),
+                .success(.init(items: [.kraken], page: 2, pageSize: 2, nextPage: nil))
             ],
             duration: mockDuration,
             hookRockets: hookRockets,
