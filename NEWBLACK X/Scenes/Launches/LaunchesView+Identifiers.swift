@@ -14,7 +14,7 @@ extension ViewIdentifiers {
             super.init(file: "Launches")
         }
 
-
+        lazy var launch: Launch = .init(key: key)
     }
 
     var launches: Launches { .init() }
